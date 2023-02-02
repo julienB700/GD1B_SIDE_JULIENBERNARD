@@ -647,7 +647,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         this.anims.create({
         key: 'up-right',
-        frames: [ { key: 'perso', frame: 13 } ],
+        frames: [ { key: 'perso', frame: 15 } ],
         frameRate: 10
         });
 
@@ -688,7 +688,6 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.hpText=this.add.text(0,0,'Lives: 3',{fontSize:'32px',fill:'#000'});
 
         this.add.image(800,800,"barrieres");
-        //this.add.image(3,3,"Ui").setOrigin(0,0).setScrollFactor(0);
         
     
     }
@@ -917,21 +916,20 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         if (this.gameOver == true){return;}
         
+       
         if (this.clavier.Q.isDown && !this.onWallGauche && ! this.walljump){ //si la touche gauche est appuyée
-        
-
             this.player.setVelocityX(-160); //alors vitesse négative en X
             this.player.anims.play('left', true); //et animation => gauche
-
-        
-        
+            if(this.clavier.SPACE.isDown){
+                this.player.anims.play('up-left', true)
+            }
         }
 
         else if (this.onWallGauche && this.clavier.SPACE.isDown){
             this.walljump=true;
             this.player.setVelocityY(-450);
             this.player.setVelocityX(300); //alors vitesse positive en X
-            this.player.anims.play('right', true);
+            this.player.anims.play('up-right', true);
             this.onWallGauche=false;
             setTimeout(() => {
                 this.walljump=false;
@@ -943,14 +941,19 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         else if (this.clavier.D.isDown && !this.onWallDroit && ! this.walljump){ //sinon si la touche droite est appuyée
             this.player.setVelocityX(160); //alors vitesse positive en X
             this.player.anims.play('right', true); //et animation => droite
+            if(this.clavier.SPACE.isDown){
+                this.player.anims.play('up-right', true)
+            }
+            
         }
 
+        
 
         else if (this.onWallDroit && this.clavier.SPACE.isDown){
             this.walljump=true;
             this.player.setVelocityY(-450);
             this.player.setVelocityX(-300); //alors vitesse positive en X
-            this.player.anims.play('left', true);
+            this.player.anims.play('up-left', true);
             this.onWallDroit=false;
             setTimeout(() => {
                 this.walljump=false;
@@ -975,7 +978,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         if (this.clavier.SPACE.isDown && this.player.body.blocked.down){
             //si touche haut appuyée ET que le perso touche le sol
             this.player.setVelocityY(-500); //alors vitesse verticale négative
-
+          
             // hero can't jump anymore
             this.canJump = false;
         
@@ -983,11 +986,9 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             this.onWallDroit = false;
             this.onWallGauche = false;
         
-        
-        
-        
         }
 
+        
         if (this.clavier.S.isDown && !this.player.body.touching.down){ //si la touche bas est appuyée en saut
             this.player.setVelocityY(450); 
         } 
@@ -1001,34 +1002,20 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             this.onWallDroit = false;
             this.onWallGauche = false;
         }
-
-
-
         if(this.player.body.blocked.right && !this.player.body.blocked.down){
         
             this.onWallDroit = true;
         }
-
-
-
         if(this.player.body.blocked.left && !this.player.body.blocked.down){
             this.onWallGauche = true;
 
         }
-
-
         }
     }
-
-        
-
-
 
         function playerHit1(){
         console.log("touché violet !")
     }
-
-
 
     var config = {
         type: Phaser.AUTO,
