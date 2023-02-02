@@ -1,0 +1,1049 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" /><title> Super Cat </title>
+<script
+src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
+<style type="text/css"> body { margin: 0; }</style>
+</head>
+<body>
+<script type="text/javascript">
+
+    
+
+    
+
+    class monjeu extends Phaser.Scene{
+            constructor() {
+                super("monjeu");
+            }
+
+    preload(){
+
+        // *************************************************************************************Les Différents sprites :
+
+        this.load.spritesheet('SpriteFire','Assets/Sprites/SpriteFire.png',
+            { frameWidth: 32, frameHeight: 32 });
+
+        this.load.spritesheet('SpriteCoin','Assets/Sprites/SpriteCoin.png',
+            { frameWidth: 32, frameHeight: 32 });
+
+        this.load.spritesheet('SpriteBlueCard','Assets/Sprites/SpriteBlueCard.png',
+            { frameWidth: 32, frameHeight: 32 });
+
+        this.load.spritesheet('SpriteGreenCard','Assets/Sprites/SpriteGreenCard.png',
+            { frameWidth: 32, frameHeight: 32 });
+        
+        this.load.spritesheet('SpriteYellowCard','Assets/Sprites/SpriteYellowCard.png',
+            { frameWidth: 32, frameHeight: 32 });
+
+        this.load.spritesheet('SpriteRedCard','Assets/Sprites/SpriteRedCard.png',
+            { frameWidth: 32, frameHeight: 32 });
+
+        this.load.spritesheet('SpriteHealthPotion','Assets/Sprites/SpriteHealthPotion.png',
+            { frameWidth: 32, frameHeight: 32 });
+
+
+        //#region Load Image
+
+        this.load.image("PorteRouge", "Assets/Portes/PorteR.png");
+        this.load.image("PorteJaune", "Assets/Portes/PorteJ.png");
+        this.load.image("PorteVerte", "Assets/Portes/PorteV.png");
+        this.load.image("PorteBleu", "Assets/Portes/PorteB.png");
+        this.load.image("Ui", "Assets/UI.png")
+
+        this.load.image("PorteRougeBleuJaune", "Assets/Portes/PorteRBJ.png");
+        this.load.image("PorteRougeBleuJauneVerte", "Assets/Portes/PorteRBJV.png");
+
+
+
+        this.load.image("barrieres", "Assets/Barrieres.png");
+        this.load.image("background", "Assets/City2.png");
+        this.load.image("collectibles", "Assets/Assets_plateformes/Collectibles.png");
+        this.load.image("barrieres", "Assets/Barrieres.png");
+        this.load.image("Phaser_assets", "Assets/Assets_plateformes/Plateformes_1.png");
+        this.load.tilemapTiledJSON("carte", "Assets/Map_1.json");
+
+
+        this.load.spritesheet('perso','Assets/cat.png',
+        { frameWidth: 32, frameHeight: 32});
+        //#endregion Load Image
+    }
+
+        
+    create (){
+
+        //this.cameraUi = this.cameras.add(0,0,800,800);
+
+        this.CarteRougeDeLaMortQuiTue = false;
+        this.CarteBleuDeLaMortQuiTue = false;
+        this.CarteVerteDeLaMortQuiTue = false;
+        this.CarteJauneDeLaMortQuiTue = false;
+
+
+        this.Dash = false
+
+        this.LaGrosseMoula = 0;
+        this.healthpoint = 3;
+        this.gameOver = false;
+        this.sens = 1;
+        this.walljump = false;
+
+
+        this.Nombredevieperdu = 0;
+
+        this.scoreText; 
+
+        this.add.image(800,800,"background");
+
+        const carteDuNiveau = this.add.tilemap("carte");
+
+        const tileset = carteDuNiveau.addTilesetImage(
+          "Plateformes",
+          "Phaser_assets"
+        );
+        const Plateformes = carteDuNiveau.createLayer(
+          "plateformes",
+          tileset
+        );
+       
+        // *********************************************************  Physique du Feu ******************************************************************************************************************************
+        this.fire = this.physics.add.group({ allowGravity : false, collideWorldBounds: true})
+         // ******************************************************* FEU du Level 1 ********************************************************************************************
+        this.SpriteFireUn = this.fire.create(432, 400, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(464, 400, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(496, 400, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(720, 400, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(752, 400, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(912, 400, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(944, 400, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1104, 400, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1136, 400, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1296, 400, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1328, 400, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        
+        //************************************************************ FEU du Level 2  *************************************************************************************************
+        this.SpriteFireUn = this.fire.create(1552, 560, 'SpriteFire').setSize(25,32).setOffset(7,0);
+            this.SpriteFireUn.angle = -90;
+
+
+        this.SpriteFireUn = this.fire.create(1488, 752, 'SpriteFire').setSize(25,32).setOffset(0,0);
+            this.SpriteFireUn.angle = 90;
+
+
+        this.SpriteFireUn = this.fire.create(1552, 944, 'SpriteFire').setSize(25,32).setOffset(7,0);
+            this.SpriteFireUn.angle = -90;
+
+
+        this.SpriteFireUn = this.fire.create(1488, 1136, 'SpriteFire').setSize(25,32).setOffset(0,0);
+            this.SpriteFireUn.angle = 90;
+
+        this.SpriteFireUn = this.fire.create(1552, 944, 'SpriteFire').setSize(25,32).setOffset(7,0);
+            this.SpriteFireUn.angle = -90;
+
+
+        this.SpriteFireUn = this.fire.create(1488, 1600, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1456, 1600, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1424, 1600, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1392, 1600, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1296, 1600, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1264, 1600, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1168, 1600, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1104, 1600, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1008, 1600, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(976, 1600, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(848, 1600, 'SpriteFire').setSize(32,25).setOffset(0,7);
+
+        this.SpriteFireUn = this.fire.create(880, 1456, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(912, 1456, 'SpriteFire').setSize(32,25).setOffset(0,7);
+
+        this.SpriteFireUn = this.fire.create(880, 1600, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(720, 1600, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(688, 1600, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(624, 1600, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(560, 1600, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(464, 1600, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(496, 1600, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(400, 1600, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(176, 1600, 'SpriteFire').setSize(32,25).setOffset(0,7);
+    
+
+
+        //Level 3
+        this.SpriteFireUn = this.fire.create(496,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(528,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(560,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(592,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(624,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(656,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(688,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(720,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(752,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(784,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(816,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(848,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(880,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(912,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(944,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(976,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1008,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1040,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1072,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1104,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1136,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1168,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1200,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1232,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1264,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1296,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1328,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1360,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1392,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
+
+        this.SpriteFireUn = this.fire.create(1072,752, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1008,752, 'SpriteFire').setSize(32,25).setOffset(0,7);
+
+        this.SpriteFireInvertTrois= this.fire.create(944,656, 'SpriteFire').setSize(32,25).setOffset(0,0);
+        this.SpriteFireInvertTrois.setFlipY(true);
+        this.SpriteFireInvertTrois= this.fire.create(912,656, 'SpriteFire').setSize(32,25).setOffset(0,0);
+        this.SpriteFireInvertTrois.setFlipY(true);
+            
+        this.SpriteFireUn = this.fire.create(1360,976, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1392,976, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        //feu Verticale ************************************************************************************************************************************************************************************
+
+        this.SpriteFireInvertTrois = this.fire.create(464, 496, 'SpriteFire');
+            this.SpriteFireInvertTrois.setFlipY(true);
+        this.SpriteFireInvertTrois = this.fire.create(496, 496, 'SpriteFire');
+            this.SpriteFireInvertTrois.setFlipY(true);
+        this.SpriteFireInvertTrois = this.fire.create(496, 624, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = -90;
+        this.SpriteFireInvertTrois = this.fire.create(496, 656, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = -90;
+        this.SpriteFireInvertTrois = this.fire.create(496, 688, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = -90;
+        this.SpriteFireInvertTrois = this.fire.create(496, 720, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = -90;
+        this.SpriteFireInvertTrois = this.fire.create(496, 752, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = -90;
+        this.SpriteFireInvertTrois = this.fire.create(496, 784, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = -90;
+        this.SpriteFireInvertTrois = this.fire.create(496, 816, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = -90;
+        this.SpriteFireInvertTrois = this.fire.create(496, 848, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = -90;
+        this.SpriteFireInvertTrois = this.fire.create(496, 880, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = -90;
+        this.SpriteFireInvertTrois = this.fire.create(496, 912, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = -90;
+        this.SpriteFireInvertTrois = this.fire.create(496, 944, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = -90;
+        this.SpriteFireInvertTrois = this.fire.create(496, 976, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = -90;
+        this.SpriteFireInvertTrois = this.fire.create(496, 1008, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = -90;
+
+            this.SpriteFireInvertTrois = this.fire.create(368, 624, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = 90;
+        this.SpriteFireInvertTrois = this.fire.create(368, 656, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = 90;
+        this.SpriteFireInvertTrois = this.fire.create(368, 688, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = 90;
+        this.SpriteFireInvertTrois = this.fire.create(368, 720, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = 90;
+        this.SpriteFireInvertTrois = this.fire.create(368, 752, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = 90;
+        this.SpriteFireInvertTrois = this.fire.create(368, 784, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = 90;
+        this.SpriteFireInvertTrois = this.fire.create(368, 816, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = 90;
+        this.SpriteFireInvertTrois = this.fire.create(368, 848, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = 90;
+        this.SpriteFireInvertTrois = this.fire.create(368, 880, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = 90;
+        this.SpriteFireInvertTrois = this.fire.create(368, 912, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = 90;
+        this.SpriteFireInvertTrois = this.fire.create(368, 944, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = 90;
+        this.SpriteFireInvertTrois = this.fire.create(368, 976, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = 90;
+        this.SpriteFireInvertTrois = this.fire.create(368, 1008, 'SpriteFire');
+            this.SpriteFireInvertTrois.angle = 90;
+
+
+
+
+
+
+
+        //*******************************************************************************************************************************************************
+
+
+        //*****************************************************     Level 1 Coins       ******************************************************************************
+        //physique des pieces************************************************************************************************************************************************
+        this.coin = this.physics.add.group({allowGravity: false, collideWorldBounds: true});
+        //************************************************************************************************************************************************************************************
+        this.SpriteCoinUn = this.coin.create(80, 368, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(80, 272, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(80, 176, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(144, 144, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+
+        this.SpriteCoinUn = this.coin.create(304, 176, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(272, 400, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(368, 272, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(464, 208, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(528, 144, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(592, 144, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(592, 304, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(560, 368, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(816, 272, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(880, 272, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+
+        this.SpriteCoinUn = this.coin.create(1040, 144, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(976, 144, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+
+        this.SpriteCoinUn = this.coin.create(1168,272, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+
+        this.SpriteCoinUn = this.coin.create(1392,208, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(1424,208, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+
+        this.SpriteCoinUn = this.coin.create(1040, 16, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(1104, 16, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+
+
+        //*****************************************************     Level 2 Coins       ******************************************************************************
+        this.SpriteCoinDeux = this.coin.create(1488, 656, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinDeux = this.coin.create(1488, 688, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinDeux = this.coin.create(1488, 720, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+
+        this.SpriteCoinDeux = this.coin.create(1552, 848, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinDeux = this.coin.create(1552, 880, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinDeux = this.coin.create(1552, 912, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+
+        this.SpriteCoinDeux = this.coin.create(1488, 1040, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinDeux = this.coin.create(1488, 1072, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinDeux = this.coin.create(1488, 1104, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+
+        this.SpriteCoinDeux = this.coin.create(1296, 1376, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinDeux = this.coin.create(1264, 1376, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        
+        this.SpriteCoinDeux = this.coin.create(1040, 1408, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinDeux = this.coin.create(1008, 1408, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinDeux = this.coin.create(976, 1408, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+
+        this.SpriteCoinDeux = this.coin.create(944, 1552, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+
+        this.SpriteCoinDeux = this.coin.create(624, 1520, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinDeux = this.coin.create(560, 1520, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinDeux = this.coin.create(496, 1520, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinDeux = this.coin.create(464, 1520, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+
+
+        
+        this.SpriteCoinDeux = this.coin.create(624, 1328, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinDeux = this.coin.create(592, 1328, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinDeux = this.coin.create(560, 1328, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinDeux = this.coin.create(528, 1328, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+
+
+        this.SpriteCoinDeux = this.coin.create(304, 1232, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinDeux = this.coin.create(272, 1232, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinDeux = this.coin.create(240, 1232, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinDeux = this.coin.create(304, 1200, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinDeux = this.coin.create(272, 1200, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinDeux = this.coin.create(240, 1200, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+
+
+    //************************************************          Level 3 Coins           ***************************************************************************
+        
+        this.SpriteCoinUn = this.coin.create(432, 624, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(432, 656, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(432, 688, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(432, 720, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(432, 752, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(432, 784, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(432, 816, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(432, 848, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(432, 880, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(432, 912, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(432, 944, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(432, 976, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(432, 1008, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+
+
+
+        
+    
+        this.SpriteCoinUn = this.coin.create(592, 688, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(624, 816, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(656, 944, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(592, 1008, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+
+        this.SpriteCoinUn = this.coin.create(592, 624, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(624, 624, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(656, 624, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+
+        //Level 1 HealthPotions
+        //Physique de la potion de la potion de soin / croquette!**************************************************************************************
+        this.HealthPotion= this.physics.add.group({ allowGravity : false, collideWorldBounds: true});
+        //********************************************************************************************************************************************
+
+        this.HeathpotionpUn = this.HealthPotion.create(16, 144, 'SpriteHealthPotion');
+        this.HeathpotionpUn = this.HealthPotion.create(688, 336, 'SpriteHealthPotion');
+        this.HeathpotionpUn = this.HealthPotion.create(912, 208, 'SpriteHealthPotion');
+        this.HeathpotionpUn = this.HealthPotion.create(1232, 272, 'SpriteHealthPotion');
+        
+
+        this.HeathpotionpUn = this.HealthPotion.create(1552, 1536, 'SpriteHealthPotion');
+        this.HeathpotionpUn = this.HealthPotion.create(1232, 1536, 'SpriteHealthPotion');
+        this.HeathpotionpUn = this.HealthPotion.create(1040, 1536, 'SpriteHealthPotion');
+
+
+
+        this.HeathpotionpUn = this.HealthPotion.create(560, 624, 'SpriteHealthPotion');
+        //*******************************************************Level 1 / 2 / 3 Cards *******************************************************************
+        // RED CARS
+        this.RedCard= this.physics.add.group({ allowGravity : false, collideWorldBounds: true});
+        //level 1
+        this.RedCardUn = this.RedCard.create(760, 16, 'SpriteRedCard');
+        //level 2 
+        this.RedCardDeux= this.RedCard.create(240, 776, 'SpriteRedCard');
+        //level 3
+        this.RedCardTrois= this.RedCard.create(1136,736, 'SpriteRedCard');
+
+
+        //BLUE CARDS
+        this.BlueCard= this.physics.add.group({ allowGravity : false, collideWorldBounds: true});
+        //level 1
+        this.BlueCardUn = this.BlueCard.create(560, 240, 'SpriteBlueCard');
+        //level 2
+        this.BlueCardDeux = this.BlueCard.create(80, 1488, 'SpriteBlueCard');
+        //level 3
+        this.BlueCardTrois = this.BlueCard.create(1392,1056, 'SpriteBlueCard');
+
+        //GREEN CARDS
+        this.GreenCard= this.physics.add.group({ allowGravity : false, collideWorldBounds: true});
+        //leve 2
+        this.GreenCardUn = this.GreenCard.create(624, 1424, 'SpriteGreenCard');
+        //level 3
+        this.GreenCardDeux= this.GreenCard.create(560, 528, 'SpriteGreenCard');
+
+        //YELLOW CARDS
+        this.YellowCard= this.physics.add.group({ allowGravity : false, collideWorldBounds: true});
+        //Level 1
+        this.YellowCardUn = this.YellowCard.create(1020, 384, 'SpriteYellowCard');
+        //level 2
+        this.YellowCardDeux= this.YellowCard.create(816, 1536, 'SpriteYellowCard');
+        //level 3
+        this.YellowCardDeux= this.YellowCard.create(368, 1264, 'SpriteYellowCard');
+
+
+                        //**********************************************************        PORTES      *********************************************************
+
+                        this.PorteRouge = this.physics.add.sprite(1072, 288, 'PorteRouge').setImmovable(true);
+                        this.PorteRouge.body.allowGravity = false;
+
+                        this.PorteJaune = this.physics.add.sprite(624, 384, 'PorteJaune').setImmovable(true);
+                        this.PorteJaune.body.allowGravity = false;
+
+                        this.PorteRBJ = this.physics.add.sprite(1488, 384, 'PorteRougeBleuJaune').setImmovable(true);
+                        this.PorteRBJ.body.allowGravity = false;
+
+
+                        //*********************** LEVEL 2 dans l'ordre ************************************************
+                        this.PorteVerte = this.physics.add.sprite(1520, 1536, 'PorteVerte').setImmovable(true);
+                        this.PorteVerte.body.allowGravity = false;
+
+                        this.PorteVerteUn = this.physics.add.sprite(1360, 1536, 'PorteVerte').setImmovable(true);
+                        this.PorteVerteUn.body.allowGravity = false;
+
+                        this.PorteBleuUn= this.physics.add.sprite(80, 992, 'PorteBleu').setImmovable(true);
+                        this.PorteBleuUn.body.allowGravity = false;
+
+                        this.PorteRougeUn = this.physics.add.sprite(1072, 1536, 'PorteRouge').setImmovable(true);
+                        this.PorteRougeUn.body.allowGravity = false;
+
+                        this.PorteJauneUn = this.physics.add.sprite(752, 1536, 'PorteJaune').setImmovable(true);
+                        this.PorteJauneUn.body.allowGravity = false;
+
+                        this.PorteBleuDeux= this.physics.add.sprite(496, 1408, 'PorteBleu').setImmovable(true);
+                        this.PorteBleuDeux.body.allowGravity = false;
+
+                        this.PorteVerteDeux= this.physics.add.sprite(208, 1216, 'PorteVerte').setImmovable(true);
+                        this.PorteVerteDeux.body.allowGravity = false;
+
+                        this.PorteJauneDeux = this.physics.add.sprite(144, 1472, 'PorteJaune').setImmovable(true);
+                        this.PorteJauneDeux.body.allowGravity = false;
+
+                        this.PorteRougeBleuJauneVerteUn = this.physics.add.sprite(336, 544, 'PorteRougeBleuJauneVerte').setImmovable(true);
+                        this.PorteRougeBleuJauneVerteUn.body.allowGravity = false;
+
+                        //*********************************************   LEVEL 3 dans l'ordre    ****************************************************************
+
+                        this.PorteRougeDeux = this.physics.add.sprite(464, 1184, 'PorteRouge').setImmovable(true);
+                        this.PorteRougeDeux.body.allowGravity = false;
+
+                        this.PorteJauneTrois = this.physics.add.sprite(1328,1056, 'PorteJaune').setImmovable(true);
+                        this.PorteJauneTrois.body.allowGravity = false;
+
+                        this.PorteRougeTrois = this.physics.add.sprite(1200,736, 'PorteRouge').setImmovable(true);
+                        this.PorteRougeTrois.body.allowGravity = false;
+
+                        this.PorteBleuTrois = this.physics.add.sprite(1328, 512, 'PorteBleu').setImmovable(true);
+                        this.PorteBleuTrois.body.allowGravity = false;
+
+                        this.PorteBleuQuatre = this.physics.add.sprite(720, 512, 'PorteBleu').setImmovable(true);
+                        this.PorteBleuQuatre.body.allowGravity = false;
+
+                        this.PorteRougeBleuJauneVerteDeux= this.physics.add.sprite(1008,832, 'PorteRougeBleuJauneVerte').setImmovable(true);
+                        this.PorteRougeBleuJauneVerteDeux.body.allowGravity = false;
+
+                        this.PorteRougeBleuJauneVerteTrois= this.physics.add.sprite(1040,832, 'PorteRougeBleuJauneVerte').setImmovable(true);
+                        this.PorteRougeBleuJauneVerteTrois.setFlipX(true);
+                        this.PorteRougeBleuJauneVerteTrois.body.allowGravity = false;
+
+        
+
+        //***********************************************************************           Limite          *********************************************************************************
+        Plateformes.setCollisionByProperty({ estSolide: true });
+        
+        this.player = this.physics.add.sprite(0,300, 'perso').setSize(20,20).setOffset(5,12); //SPAWN LEVEL 1 0.300  : LEVEL 2 1552, 384 LEVEL 3 
+        console.log("It's my meow-ment!!")
+        this.player.setCollideWorldBounds(true);   
+
+        //***********************************************        Entrer en contact       *******************************************************************
+
+
+        //this.physics.add.overlap(this.player, this.fire, this.JePerdsDeLaVieOhMonDieu, null, this)
+        
+        this.physics.add.overlap(this.player, this.RedCard, this.JePossedeUneTresBelleCarteRouge, null, this)
+        this.physics.add.overlap(this.player, this.YellowCard, this.JePossedeUneTresBelleCarteJaune, null, this);
+        this.physics.add.overlap(this.player, this.BlueCard, this.JePossedeUneTresBelleCarteBleu, null, this);
+        this.physics.add.overlap(this.player, this.GreenCard, this.JePossedeUneTresBelleCarteVerte, null, this);
+
+
+        this.physics.add.overlap(this.player, this.coin, this.JeRecolteMesPiecesDeMonnaie, null, this);
+        this.physics.add.overlap(this.player, this.HealthPotion, this.MiamMiamLesBonnesCroquettes, null, this);
+
+
+
+
+        //********************************************************************************************************************************************************************************************
+        
+        this.physics.add.collider(this.player, Plateformes);
+
+        //***************  COLIDERS PORTES  ************************
+
+        this.physics.add.collider(this.player, this.PorteRouge);
+        this.physics.add.collider(this.player, this.PorteRougeUn);
+        this.physics.add.collider(this.player, this.PorteRougeDeux);
+        this.physics.add.collider(this.player, this.PorteRougeTrois);
+
+        this.physics.add.collider(this.player, this.PorteJaune);
+        this.physics.add.collider(this.player, this.PorteJauneUn);
+        this.physics.add.collider(this.player, this.PorteJauneDeux);
+        this.physics.add.collider(this.player, this.PorteJauneTrois);
+
+
+        this.physics.add.collider(this.player, this.PorteRBJ);
+
+
+        this.physics.add.collider(this.player, this.PorteVerte);
+        this.physics.add.collider(this.player, this.PorteVerteUn);
+        this.physics.add.collider(this.player, this.PorteVerteDeux);
+        
+        
+
+        this.physics.add.collider(this.player, this.PorteBleu);
+        this.physics.add.collider(this.player, this.PorteBleuUn);
+        this.physics.add.collider(this.player, this.PorteBleuDeux);
+        this.physics.add.collider(this.player, this.PorteBleuTrois);
+        this.physics.add.collider(this.player, this.PorteBleuQuatre);
+
+        this.physics.add.collider(this.player, this.PorteRougeBleuJauneVerteUn);
+
+        this.physics.add.collider(this.player, this.PorteRougeBleuJauneVerteDeux);
+        this.physics.add.collider(this.player, this.PorteRougeBleuJauneVerteTrois);
+        
+      
+
+
+
+        this.physics.add.collider(this.player, this.PorteRBJV);
+
+        this.cameraFilter = this.cameras.main;
+        this.physics.world.setBounds(0, 0, 1600, 1600); 
+        this.cameras.main.setBounds(0, 0, 1600, 1600);
+        this.cameras.main.zoom = 2.5;
+        this.cameras.main.startFollow(this.player);
+        
+  
+        //****************************************************************          Animation des Sprites du jeu            *********************************************************
+        this.anims.create({
+            key: 'SpriteFire',
+            frames: this.anims.generateFrameNumbers('SpriteFire', {start:0,end:4}),
+            frameRate: 10,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'SpriteCoin',
+            frames: this.anims.generateFrameNumbers('SpriteCoin', {start:0,end:24}),
+            frameRate: 10,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'SpriteBlueCard',
+            frames: this.anims.generateFrameNumbers('SpriteBlueCard', {start:0,end:24}),
+            frameRate: 10,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'SpriteGreenCard',
+            frames: this.anims.generateFrameNumbers('SpriteGreenCard', {start:0,end:24}),
+            frameRate: 10,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'SpriteYellowCard',
+            frames: this.anims.generateFrameNumbers('SpriteYellowCard', {start:0,end:24}),
+            frameRate:10,
+            repeat: -1
+        })
+
+
+        this.anims.create({
+            key: 'SpriteRedCard',
+            frames: this.anims.generateFrameNumbers('SpriteRedCard', {start:0,end:24}),
+            frameRate: 10,
+            repeat: -1
+        })
+
+        this.anims.create({
+            key: 'SpriteHealthPotion',
+            frames: this.anims.generateFrameNumbers('SpriteHealthPotion', {start:0,end:24}),
+            frameRate: 10,
+            repeat: -1
+        })
+
+        //************************************************************* Animation du personnage **************************************************************************
+
+
+        this.anims.create({
+        key: 'left',
+        frames: this.anims.generateFrameNumbers('perso', {start:5,end:7}),
+        frameRate: 4,
+        repeat: -1
+        });
+
+        this.anims.create({
+        key: 'turn',
+        frames: [ { key: 'perso', frame: 8 } ],
+        frameRate: 10
+        });
+
+        this.anims.create({
+        key: 'up-right',
+        frames: [ { key: 'perso', frame: 13 } ],
+        frameRate: 10
+        });
+
+        this.anims.create({
+        key: 'up-left',
+        frames: [ { key: 'perso', frame: 1 } ],
+        frameRate: 10
+        });
+
+        this.anims.create({
+        key: 'onWallL',
+        frames: [ { key: 'perso', frame: 0 } ],
+        frameRate: 10
+        });
+        this.anims.create({
+        key: 'onWallR',
+        frames: [ { key: 'perso', frame: 16 } ],
+        frameRate: 10
+        });
+
+        this.anims.create({
+        key: 'right',
+        frames: this.anims.generateFrameNumbers('perso', {start:11,end:13}),
+        frameRate: 4,
+        repeat: -1
+        });
+
+        //******************************************************************                 METTRE LE POWER UP DASH ICI            **********************************************************************
+
+
+        //***************************************************************************************************************************************************************************
+        this.clavier = this.input.keyboard.createCursorKeys();
+
+        this.clavier = this.input.keyboard.addKeys('S,Q,D,SPACE,SHIFT');
+
+        this.scoreText=this.add.text(16,16,'0$',{fontSize:'32px',fill:'#000'}).setOrigin(0,16).setScrollFactor(1);
+
+        this.hpText=this.add.text(0,0,'Lives: 3',{fontSize:'32px',fill:'#000'});
+
+        this.add.image(800,800,"barrieres");
+        //this.add.image(3,3,"Ui").setOrigin(0,0).setScrollFactor(0);
+        
+    
+    }
+        //***********************************************        PERDRE DE LA VIE       *******************************************************************
+
+    JePerdsDeLaVieOhMonDieu(player, fire){
+        player.setTint( 0xff0000 );
+
+            if (player.scene.Nombredevieperdu == 0){
+                console.log("Smell like burnt Cat in here !!")
+                player.scene.Nombredevieperdu += 1;
+                this.physics.pause();
+            }   
+    }
+
+        //***********************************************        PRENDRE LES COLLECTIBLES      *******************************************************************
+
+    JePossedeUneTresBelleCarteRouge(player, RedCard){
+        RedCard.disableBody(true, true);
+        this.CarteRougeDeLaMortQuiTue = true;
+        console.log(this.CarteRougeDeLaMortQuiTue)
+        console.log("Miaow that's a red card, I can use it to open a door?! No Fuuurr-king way!");
+    }
+
+    JePossedeUneTresBelleCarteJaune(player, YellowCard){
+        YellowCard.disableBody(true, true);
+        this.CarteJauneDeLaMortQuiTue = true;
+        console.log(this.CarteJauneDeLaMortQuiTue)
+    }
+    JePossedeUneTresBelleCarteBleu(player, BlueCard){
+        BlueCard.disableBody(true, true);
+        this.CarteBleuDeLaMortQuiTue = true;
+        console.log(this.CarteBleuDeLaMortQuiTue)
+    }
+
+    JePossedeUneTresBelleCarteVerte(player, GreenCard){
+        GreenCard.disableBody(true, true);
+        this.CarteVerteDeLaMortQuiTue = true;
+        console.log(this.CarteVerteDeLaMortQuiTue)
+        console.log("Miaow that's a green card !!!");
+    }
+
+    JeRecolteMesPiecesDeMonnaie(player, coin){
+        coin.disableBody(true, true);
+        this.LaGrosseMoula += 1; //augmente les pieces de 1
+        this.scoreText.setText(this.LaGrosseMoula+'$'); 
+        
+        console.log("Miew Miew a Gold Coin!!");
+    }
+
+    MiamMiamLesBonnesCroquettes(player, HealthPotion){
+        HealthPotion.disableBody(true, true);
+        this.healthpoint += 1; 
+        this.hpText.setText('Lives :' + this.healthpoint);
+        console.log("Hp + 1")
+    }
+    
+
+    
+
+    
+
+    update(){
+
+        //***************** TEST **************************
+        //this.scoreText.x = this.player.body.position.x-80;
+        //this.scoreText.y = this.player.body.position.y+115;
+//
+        //this.hpText.x = this.player.body.position.x-80;
+        //this.hpText.y = this.player.body.position.y-130;
+
+
+
+        // ***************************************************************** ON FAIT DISPARAITRE LES PORTES SI LES CONDITIONS SONT REMPLIES ***********************************************
+       //LEVEL 1
+        if (this.player.x >= 1040 && this.player.y <= 300 && this.player.x <= 1130 && this.player.y >= 200 && this.CarteRougeDeLaMortQuiTue == true){
+            this.PorteRouge.disableBody(true, true)
+            console.log("Miaow!! I gotta good feline about this");
+        }
+
+        if (this.player.x >= 592 && this.player.y <= 384 && this.player.x <= 656 && this.player.y >= 320 && this.CarteJauneDeLaMortQuiTue == true){
+            this.PorteJaune.disableBody(true, true)
+            console.log("Miaow!! Purrrrr-Fect !!");
+        }
+
+
+        // DERNIERE PORTE DU NIVEAU 1 RETIRER LES CLES, ILS TE FAUT *****************
+
+
+        if (this.player.x >= 1400 && this.player.y <= 384 && this.player.x <= 1488 && this.player.y >= 320  && this.CarteRougeDeLaMortQuiTue == true && this.CarteBleuDeLaMortQuiTue == true && this.CarteJauneDeLaMortQuiTue == true) {
+            this.PorteRBJ.disableBody(true, true)
+            this.CarteBleuDeLaMortQuiTue = false;
+            this.CarteJauneDeLaMortQuiTue = false;
+            this.CarteRougeDeLaMortQuiTue = false; 
+            console.log("Miaow!! Feline good !!")
+            console.log("ARE YOU KITTEN ME!! I need new cards ?!!");
+        }
+
+        
+        
+        //**************************************************************************
+
+        //LEVEL 2
+        if (this.player.x >= 1350 && this.player.y <= 1600 && this.player.x <= 1550 && this.player.y >= 1350 && this.CarteVerteDeLaMortQuiTue == true){
+            this.PorteVerte.disableBody(true, true)
+            console.log("Miaow!! Purrrrr-Fect !!");
+        }
+
+        if (this.player.x >= 1350 && this.player.y <= 1472 && this.player.x <= 1550 && this.player.y >= 1350 && this.CarteVerteDeLaMortQuiTue == true){
+            this.PorteVerteUn.disableBody(true, true)
+            console.log("Miaow!! Purrrrr-Fect !!");
+        }
+        if (this.player.x >= 1030 && this.player.y <= 1600 && this.player.x <= 1200 && this.player.y >= 1472 && this.CarteRougeDeLaMortQuiTue == true){
+            this.PorteRougeUn.disableBody(true, true)
+            console.log("Miaow!! I gotta good feline about this");
+        }
+        if (this.player.x >= 752 && this.player.y <= 1536 && this.player.x <= 848 && this.player.y >= 1472 && this.CarteJauneDeLaMortQuiTue == true){
+            this.PorteJauneUn.disableBody(true, true)
+            console.log("Miaow!! Purrrrr-Fect !!");
+        }
+        if (this.player.x >= 80 && this.player.y <= 1024 && this.player.x <= 176 && this.player.y >= 928 && this.CarteBleuDeLaMortQuiTue == true){
+            this.PorteBleuUn.disableBody(true, true)
+            console.log("Miaow!! I gotta good feline about this");
+        }
+        if (this.player.x >= 432 && this.player.y <= 1408 && this.player.x <= 496 && this.player.y >= 1344 && this.CarteBleuDeLaMortQuiTue == true){
+            this.PorteBleuDeux.disableBody(true, true)
+            console.log("Miaow!! I gotta good feline about this");
+        }
+        if (this.player.x >= 144 && this.player.y <= 1472 && this.player.x <= 240 && this.player.y >= 1344 && this.CarteJauneDeLaMortQuiTue == true){
+            this.PorteJauneDeux.disableBody(true, true)
+            console.log("Miaow!! Purrrrr-Fect !!");
+        }
+        if (this.player.x >= 112 && this.player.y <= 1216 && this.player.x <= 240 && this.player.y >= 1120 && this.CarteVerteDeLaMortQuiTue == true){
+            this.PorteVerteDeux.disableBody(true, true)
+            console.log("Miaow!! Be careful I can be very puuurrr-suasive !!");
+        }
+         // DERNIERE PORTE DU NIVEAU 2 RETIRER LES CLES, ILS TE FAUT *****************
+
+        if (this.player.x >= 240 && this.player.y <= 554 && this.player.x <= 536 && this.player.y >= 490  && this.CarteRougeDeLaMortQuiTue == true && this.CarteBleuDeLaMortQuiTue == true && this.CarteJauneDeLaMortQuiTue == true && this.CarteVerteDeLaMortQuiTue == true) {
+            this.PorteRougeBleuJauneVerteUn.disableBody(true, true) 
+            this.CarteBleuDeLaMortQuiTue = false;
+            this.CarteJauneDeLaMortQuiTue = false;
+            this.CarteRougeDeLaMortQuiTue = false; 
+            this.CarteVerteDeLaMortQuiTue = false;
+            console.log("Miaow!! Feline good !!")
+            console.log("ARE YOU KITTEN ME!! I need new cards ?!!");
+        }
+
+        //*****************************************************************************************************
+        // LEVEL 3 
+
+        if (this.player.x >= 432 && this.player.y <= 1184 && this.player.x <= 560 && this.player.y >= 1088 && this.CarteRougeDeLaMortQuiTue == true){
+            this.PorteRougeDeux.disableBody(true, true)
+            console.log("Miaow!! I gotta good feline about this");
+        }
+        if (this.player.x >= 1232 && this.player.y <= 1056 && this.player.x <= 1328 && this.player.y >= 960 && this.CarteJauneDeLaMortQuiTue == true){
+            this.PorteJauneTrois.disableBody(true, true)
+            console.log("Miaow!! Purrrrr-Fect !!");
+        }
+
+        if (this.player.x >= 1104 && this.player.y <= 736 && this.player.x <= 1168 && this.player.y >=672 && this.CarteRougeDeLaMortQuiTue == true){
+            this.PorteRougeTrois.disableBody(true, true)
+            console.log("Miaow!! I gotta good feline about this");
+        }
+
+        if (this.player.x >= 1232 && this.player.y <= 544 && this.player.x <= 448 && this.player.y >= 1328 && this.CarteBleuDeLaMortQuiTue == true){
+            this.PorteBleuTrois.disableBody(true, true)
+            console.log("Miaow!! I gotta good feline about this");
+        }
+        if (this.player.x >= 720 && this.player.y <= 544 && this.player.x <= 816 && this.player.y >= 448 && this.CarteBleuDeLaMortQuiTue == true){
+            this.PorteBleuQuatre.disableBody(true, true)
+            console.log("Miaow!! I gotta good feline about this");
+        }
+
+        // DERNIERES PORTES DU NIVEAU 3 *****************
+
+
+        if (this.player.x >= 880 && this.player.y <= 832 && this.player.x <= 1008 && this.player.y >= 736 && this.CarteRougeDeLaMortQuiTue == true && this.CarteBleuDeLaMortQuiTue == true && this.CarteJauneDeLaMortQuiTue == true && this.CarteVerteDeLaMortQuiTue == true) {
+            this.PorteRougeBleuJauneVerteDeux.disableBody(true, true)
+            console.log("Miaow we are going to make hiiiiissss-tory");
+        }
+
+        if (this.player.x >= 880 && this.player.y <= 832 && this.player.x <= 1008 && this.player.y >= 736 && this.CarteRougeDeLaMortQuiTue == true && this.CarteBleuDeLaMortQuiTue == true && this.CarteJauneDeLaMortQuiTue == true && this.CarteVerteDeLaMortQuiTue == true) {
+            this.PorteRougeBleuJauneVerteTrois.disableBody(true, true)
+            console.log("Miaow we are going to make hiiiiissss-tory");
+        }
+// ************************************************************         Groupe d'animation          *******************************************************************     
+
+    // Animation - Feu
+
+    // Pour chaque objet faisant partie de mon groupe 'Feu', je lui indique d'effectuer l'animation 'SpriteFire' au travers d'une fonction
+        this.fire.children.each(function(SpriteFire) {
+            SpriteFire.anims.play("SpriteFire", true)
+            }, this);
+
+        
+    //Pour les pieces********************************
+        this.coin.children.each(function(SpriteCoin) {
+            SpriteCoin.anims.play("SpriteCoin", true)
+            }, this);      
+
+    //Pour les croquettes********************************
+        this.HealthPotion.children.each(function(SpriteHealthPotion) {
+            SpriteHealthPotion.anims.play("SpriteHealthPotion", true)
+            }, this);
+    
+    //Pour LES CARTES ********************************
+        this.RedCard.children.each(function(SpriteRedCard) {
+            SpriteRedCard.anims.play("SpriteRedCard", true)
+            }, this);
+
+        this.BlueCard.children.each(function(SpriteBlueCard) {
+            SpriteBlueCard.anims.play("SpriteBlueCard", true)
+            }, this);
+
+        this.GreenCard.children.each(function(SpriteGreenCard) {
+            SpriteGreenCard.anims.play("SpriteGreenCard", true)
+            }, this);
+
+        this.YellowCard.children.each(function(SpriteYellowCard) {
+            SpriteYellowCard.anims.play("SpriteYellowCard", true)
+            }, this);
+
+
+
+
+        if (this.gameOver == true){return;}
+        
+        if (this.clavier.Q.isDown && !this.onWallGauche && ! this.walljump){ //si la touche gauche est appuyée
+        
+
+            this.player.setVelocityX(-160); //alors vitesse négative en X
+            this.player.anims.play('left', true); //et animation => gauche
+
+        
+        
+        }
+
+        else if (this.onWallGauche && this.clavier.SPACE.isDown){
+            this.walljump=true;
+            this.player.setVelocityY(-450);
+            this.player.setVelocityX(300); //alors vitesse positive en X
+            this.player.anims.play('right', true);
+            this.onWallGauche=false;
+            setTimeout(() => {
+                this.walljump=false;
+            }, 300);
+        
+        
+        }
+
+        else if (this.clavier.D.isDown && !this.onWallDroit && ! this.walljump){ //sinon si la touche droite est appuyée
+            this.player.setVelocityX(160); //alors vitesse positive en X
+            this.player.anims.play('right', true); //et animation => droite
+        }
+
+
+        else if (this.onWallDroit && this.clavier.SPACE.isDown){
+            this.walljump=true;
+            this.player.setVelocityY(-450);
+            this.player.setVelocityX(-300); //alors vitesse positive en X
+            this.player.anims.play('left', true);
+            this.onWallDroit=false;
+            setTimeout(() => {
+                this.walljump=false;
+            }, 300);
+        
+        
+        }
+
+        else if (! this.walljump){ // sinon
+            this.player.setVelocityX(0); //vitesse nulle
+            this.player.anims.play('turn'); //animation fait face caméra
+        }
+        setTimeout(() => {
+            this.onWall=false;
+        
+        }, 3000);
+
+
+        //lien anim https://stackabuse.com/phaser-3-and-tiled-building-a-platformer/
+
+
+        if (this.clavier.SPACE.isDown && this.player.body.blocked.down){
+            //si touche haut appuyée ET que le perso touche le sol
+            this.player.setVelocityY(-500); //alors vitesse verticale négative
+
+            // hero can't jump anymore
+            this.canJump = false;
+        
+            // hero is not on the wall anymore
+            this.onWallDroit = false;
+            this.onWallGauche = false;
+        
+        
+        
+        
+        }
+
+        if (this.clavier.S.isDown && !this.player.body.touching.down){ //si la touche bas est appuyée en saut
+            this.player.setVelocityY(450); 
+        } 
+
+        if(this.player.body.blocked.down){
+        
+            // hero can jump
+            this.canJump = true;
+        
+            // hero not on the wall
+            this.onWallDroit = false;
+            this.onWallGauche = false;
+        }
+
+
+
+        if(this.player.body.blocked.right && !this.player.body.blocked.down){
+        
+            this.onWallDroit = true;
+        }
+
+
+
+        if(this.player.body.blocked.left && !this.player.body.blocked.down){
+            this.onWallGauche = true;
+
+        }
+
+
+        }
+    }
+
+        
+
+
+
+        function playerHit1(){
+        console.log("touché violet !")
+    }
+
+
+
+    var config = {
+        type: Phaser.AUTO,
+        width:  900, height: 550,
+        physics: {
+            default: 'arcade',
+            arcade: {
+                gravity: { y: 1300 },
+                debug: true
+        }},
+        antialias: false,
+        scene: [monjeu],
+    };
+    new Phaser.Game(config);
+
+    </script>
+</body>
+</html>
