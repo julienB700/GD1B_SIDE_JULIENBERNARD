@@ -733,7 +733,6 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
     JeRecolteMesPiecesDeMonnaie(player, coin){
         coin.disableBody(true, true);
         this.nombreargent += 1 ;
-        
         console.log("Miew Miew a Gold Coin!!");
     }
 
@@ -1015,21 +1014,6 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         }
         }
     }
-    class cameraUi extends Phaser.Scene{
-            constructor() {
-                super("CameraUi");
-
-            }
-            preload(){
-
-                this.load.image("Ui", "Assets/UI.png");
-            }
-            
-        }        
-        function playerHit1(){
-        console.log("touché violet !")
-    }
-
     var config = {
         type: Phaser.AUTO,
         width:  900, height: 550,
@@ -1040,7 +1024,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
                 debug: true
         }},
         antialias: false,
-        scene: [monjeu,cameraUi],
+        scene: [monjeu],
     };
     new Phaser.Game(config);
 
