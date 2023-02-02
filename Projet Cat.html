@@ -50,7 +50,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.load.image("PorteJaune", "Assets/Portes/PorteJ.png");
         this.load.image("PorteVerte", "Assets/Portes/PorteV.png");
         this.load.image("PorteBleu", "Assets/Portes/PorteB.png");
-        this.load.image("Ui", "Assets/UI.png")
+        
 
         this.load.image("PorteRougeBleuJaune", "Assets/Portes/PorteRBJ.png");
         this.load.image("PorteRougeBleuJauneVerte", "Assets/Portes/PorteRBJV.png");
@@ -635,7 +635,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.anims.create({
         key: 'left',
         frames: this.anims.generateFrameNumbers('perso', {start:5,end:7}),
-        frameRate: 4,
+        frameRate: 6,
         repeat: -1
         });
 
@@ -671,7 +671,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.anims.create({
         key: 'right',
         frames: this.anims.generateFrameNumbers('perso', {start:11,end:13}),
-        frameRate: 4,
+        frameRate: 6,
         repeat: -1
         });
 
@@ -708,14 +708,14 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
     JePossedeUneTresBelleCarteRouge(player, RedCard){
         RedCard.disableBody(true, true);
         this.CarteRougeDeLaMortQuiTue = true;
-        console.log(this.CarteRougeDeLaMortQuiTue)
+        console.log(this.CarteRougeDeLaMortQuiTue);
         console.log("Miaow that's a red card, I can use it to open a door?! No Fuuurr-king way!");
     }
 
     JePossedeUneTresBelleCarteJaune(player, YellowCard){
         YellowCard.disableBody(true, true);
         this.CarteJauneDeLaMortQuiTue = true;
-        console.log(this.CarteJauneDeLaMortQuiTue)
+        console.log(this.CarteJauneDeLaMortQuiTue);
     }
     JePossedeUneTresBelleCarteBleu(player, BlueCard){
         BlueCard.disableBody(true, true);
@@ -1012,7 +1012,17 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         }
         }
     }
+    class cameraUi extends Phaser.Scene{
+            constructor() {
+                super("CameraUi");
 
+            }
+            preload(){
+
+                this.load.image("Ui", "Assets/UI.png");
+            }
+            
+        }        
         function playerHit1(){
         console.log("touché violet !")
     }
@@ -1027,7 +1037,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
                 debug: true
         }},
         antialias: false,
-        scene: [monjeu],
+        scene: [monjeu,cameraUi],
     };
     new Phaser.Game(config);
 
