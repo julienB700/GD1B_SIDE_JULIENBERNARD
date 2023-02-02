@@ -699,10 +699,13 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.clavier = this.input.keyboard.addKeys('S,Q,D,SPACE,SHIFT');
 
         this.nombreargent = 0
-        this.nombreargentText = this.add.text(420,233,this.nombreargent,{fontSize:'20px',fill:'#fff'}).setScale(1).setScrollFactor(0); 
+        this.nombreargentText = this.add.text(425,233,this.nombreargent,{fontSize:'20px',fill:'#fff'}).setScale(1).setScrollFactor(0); 
 
         this.mespointsdevie = 3 
         this.mespointsdevieText=this.add.text(375,233,this.mespointsdevie,{fontSize:'20px',fill:'#fff'}).setScale(1).setScrollFactor(0);
+//
+        //this.RedCard = 0
+        //this.RedCardText = this.add.text(400,233,this,BlueCard,{fontSize:'20px',fill:'#fff'}).setScale(1).setScrollFactor(0);
 
         this.add.image(800,800,"barrieres");
         this.add.image(this.player.x+450,230, "UI").setScale(1).setScrollFactor(0);
@@ -725,6 +728,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
     JePossedeUneTresBelleCarteRouge(player, RedCard){
         RedCard.disableBody(true, true);
         this.CarteRougeDeLaMortQuiTue = true;
+        //this.RedCard +=1;
         console.log(this.CarteRougeDeLaMortQuiTue);
         console.log("Miaow that's a red card, I can use it to open a door?! No Fuuurr-king way!");
     }
