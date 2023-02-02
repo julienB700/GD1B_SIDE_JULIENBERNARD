@@ -684,8 +684,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.nombreargent = 0
         this.nombreargentText = this.add.text(275,170,this.nombreargent,{fontSize:'20px',fill:'#fff'}).setScale(1).setScrollFactor(0); 
 
-        this.mespointsdevie = 3 
-        this.mespointsdevieText=this.add.text(275,200,'Lives: 3',{fontSize:'20px',fill:'#fff'}).setScale(1).setScrollFactor(0);
+        this.hpText=this.add.text(0,0,'Lives: 3',{fontSize:'32px',fill:'#000'});
 
         this.add.image(800,800,"barrieres");
         
@@ -739,7 +738,8 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
     MiamMiamLesBonnesCroquettes(player, HealthPotion){
         HealthPotion.disableBody(true, true);
-        this.mespointsdevie += 1; 
+        this.healthpoint += 1; 
+        this.hpText.setText('Lives :' + this.healthpoint);
         console.log("Hp + 1")
     }
     
@@ -751,7 +751,6 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
     update(){
 
         this.nombreargentText.setText(this.nombreargent);
-        this.mespointsdevieText.setText(this.mespointsdevie);
 
         
 
