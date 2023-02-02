@@ -927,8 +927,8 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         else if (this.onWallGauche && this.clavier.SPACE.isDown){
             this.walljump=true;
-            this.player.setVelocityY(-450);
-            this.player.setVelocityX(300); //alors vitesse positive en X
+            this.player.setVelocityY(-200);
+            this.player.setVelocityX(200); //alors vitesse positive en X
             this.player.anims.play('up-right', true);
             this.onWallGauche=false;
             setTimeout(() => {
@@ -951,8 +951,8 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         else if (this.onWallDroit && this.clavier.SPACE.isDown){
             this.walljump=true;
-            this.player.setVelocityY(-450);
-            this.player.setVelocityX(-300); //alors vitesse positive en X
+            this.player.setVelocityY(-200);
+            this.player.setVelocityX(-200); //alors vitesse positive en X
             this.player.anims.play('up-left', true);
             this.onWallDroit=false;
             setTimeout(() => {
@@ -977,7 +977,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         if (this.clavier.SPACE.isDown && this.player.body.blocked.down){
             //si touche haut appuyée ET que le perso touche le sol
-            this.player.setVelocityY(-500); //alors vitesse verticale négative
+            this.player.setVelocityY(-280); //alors vitesse verticale négative
           
             // hero can't jump anymore
             this.canJump = false;
@@ -1023,7 +1023,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         physics: {
             default: 'arcade',
             arcade: {
-                gravity: { y: 1300 },
+                gravity: { y: 500 },
                 debug: true
         }},
         antialias: false,
