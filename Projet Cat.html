@@ -50,11 +50,10 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.load.image("PorteJaune", "Assets/Portes/PorteJ.png");
         this.load.image("PorteVerte", "Assets/Portes/PorteV.png");
         this.load.image("PorteBleu", "Assets/Portes/PorteB.png");
-        
-
         this.load.image("PorteRougeBleuJaune", "Assets/Portes/PorteRBJ.png");
         this.load.image("PorteRougeBleuJauneVerte", "Assets/Portes/PorteRBJV.png");
 
+        this.load.image("PowerUpGate", "Assets/SpriteBpoxVide.png")
 
         this.load.image("UI","Assets/UI1.1.png");
         this.load.image("barrieres", "Assets/Barrieres.png");
@@ -433,6 +432,11 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.YellowCardDeux= this.YellowCard.create(368, 1264, 'SpriteYellowCard');
 
 
+      
+        
+        
+
+
                         //**********************************************************        PORTES      *********************************************************
 
                         this.PorteRouge = this.physics.add.sprite(1072, 288, 'PorteRouge').setImmovable(true);
@@ -497,9 +501,12 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
                         this.PorteRougeBleuJauneVerteTrois.setFlipX(true);
                         this.PorteRougeBleuJauneVerteTrois.body.allowGravity = false;
 
+                        this.PowerUpGate= this.physics.add.group({ allowGravity : false, collideWorldBounds: true});
+                        this.PowerUpGate= this.physics.add.sprite(64, 300,'PowerUpGate').setImmovable(true);
+                        this.PowerUpGate.disableBody(true, true)
         
 
-        //***********************************************************************           Limite          *********************************************************************************
+        //***********************************************************************          SPAWN         *********************************************************************************
         Plateformes.setCollisionByProperty({ estSolide: true });
         
         this.player = this.physics.add.sprite(0,300, 'perso').setSize(20,20).setOffset(5,12); //SPAWN LEVEL 1 0.300  : LEVEL 2 1552, 384 LEVEL 3 
@@ -509,7 +516,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         //***********************************************        Entrer en contact       *******************************************************************
 
 
-        //this.physics.add.overlap(this.player, this.fire, this.JePerdsDeLaVieOhMonDieu, null, this)
+        this.physics.add.overlap(this.player, this.fire, this.JePerdsDeLaVieOhMonDieu, null, this)
         
         this.physics.add.overlap(this.player, this.RedCard, this.JePossedeUneTresBelleCarteRouge, null, this)
         this.physics.add.overlap(this.player, this.YellowCard, this.JePossedeUneTresBelleCarteJaune, null, this);
@@ -519,7 +526,8 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         this.physics.add.overlap(this.player, this.coin, this.JeRecolteMesPiecesDeMonnaie, null, this);
         this.physics.add.overlap(this.player, this.HealthPotion, this.MiamMiamLesBonnesCroquettes, null, this);
-
+        
+        this.physics.add.overlap(this.player,this.PowerUpGate, this.JeTrouveMonPremierPouvoir,null,this);
 
 
 
@@ -594,6 +602,12 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             frameRate: 10,
             repeat: -1
         })
+        this.anims.create({
+            key: 'BlueCardForUi',
+            frames: this.anims.generateFrameNumbers('SpriteBlueCard', {start:0,end:0}),
+            frameRate: 10,
+            repeat: 0
+        })
 
         this.anims.create({
             key: 'SpriteGreenCard',
@@ -615,6 +629,12 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             frames: this.anims.generateFrameNumbers('SpriteRedCard', {start:0,end:24}),
             frameRate: 10,
             repeat: -1
+        })
+        this.anims.create({
+            key: 'RedCardForUi',
+            frames: this.anims.generateFrameNumbers('SpriteRedCard', {start:0,end:0}),
+            frameRate: 10,
+            repeat: 0
         })
 
         this.anims.create({
@@ -653,12 +673,12 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         });
 
         this.anims.create({
-        key: 'onWallL',
+        key: 'OnWallL',
         frames: [ { key: 'perso', frame: 0 } ],
         frameRate: 10
         });
         this.anims.create({
-        key: 'onWallR',
+        key: 'OnWallR',
         frames: [ { key: 'perso', frame: 16 } ],
         frameRate: 10
         });
@@ -686,7 +706,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         this.add.image(800,800,"barrieres");
         this.add.image(this.player.x+450,230, "UI").setScale(1).setScrollFactor(0);
-    
+        
     }
         //***********************************************        PERDRE DE LA VIE       *******************************************************************
 
@@ -723,6 +743,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
     JePossedeUneTresBelleCarteVerte(player, GreenCard){
         GreenCard.disableBody(true, true);
         this.CarteVerteDeLaMortQuiTue = true;
+        
         console.log(this.CarteVerteDeLaMortQuiTue)
         console.log("Miaow that's a green card !!!");
     }
@@ -738,8 +759,11 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.mespointsdevie += 1; 
         console.log("Hp + 1")
     }
-    
-
+    JeTrouveMonPremierPouvoir(player,PowerUpGate){
+        this.PowerUpGate = true
+        console.log("Power UP !!!!")
+    }
+        
     
 
     
@@ -748,16 +772,6 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         this.nombreargentText.setText(this.nombreargent);
         this.mespointsdevieText.setText(this.mespointsdevie);
-
-        
-
-        //***************** TEST **************************
-        //this.scoreText.x = this.player.body.position.x-80;
-        //this.scoreText.y = this.player.body.position.y+115;
-//
-        //this.hpText.x = this.player.body.position.x-80;
-        //this.hpText.y = this.player.body.position.y-130;
-
 
 
         // ***************************************************************** ON FAIT DISPARAITRE LES PORTES SI LES CONDITIONS SONT REMPLIES ***********************************************
@@ -873,6 +887,12 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             this.PorteRougeBleuJauneVerteTrois.disableBody(true, true)
             console.log("Miaow we are going to make hiiiiissss-tory");
         }
+
+        if (this.player.x >= 880 && this.player.y <= 832 && this.player.x <= 1008 && this.player.y >= 736 && this.CarteRougeDeLaMortQuiTue == true && this.CarteBleuDeLaMortQuiTue == true && this.CarteJauneDeLaMortQuiTue == true && this.CarteVerteDeLaMortQuiTue == true) {
+            this.PorteRougeBleuJauneVerteTrois.disableBody(true, true)
+            console.log("I made It");
+        }
+        
 // ************************************************************         Groupe d'animation          *******************************************************************     
 
     // Animation - Feu
@@ -915,7 +935,10 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         if (this.gameOver == true){return;}
         
-       
+        if(this.PowerUpGate==true && this.clavier.SHIFT.isDown && this.clavier.D.isDown){
+            this.player.setVelocityX(400);
+            console.log("Im performing a dash !!")
+        }
         if (this.clavier.Q.isDown && !this.onWallGauche && ! this.walljump){ //si la touche gauche est appuyée
             this.player.setVelocityX(-160); //alors vitesse négative en X
             this.player.anims.play('left', true); //et animation => gauche
@@ -1004,10 +1027,11 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         if(this.player.body.blocked.right && !this.player.body.blocked.down){
         
             this.onWallDroit = true;
+            this.player.anims.play('OnWallR', true)
         }
         if(this.player.body.blocked.left && !this.player.body.blocked.down){
             this.onWallGauche = true;
-
+            this.player.anims.play('OnWallL', true)
         }
         }
     }
