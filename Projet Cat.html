@@ -43,7 +43,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.load.spritesheet('SpriteHealthPotion','Assets/Sprites/SpriteHealthPotion.png',
             { frameWidth: 32, frameHeight: 32 });
         
-        this.load.spritesheet('TheBadGuy','Assets/Sprites/ImTheBadGuy.png',
+        this.load.spritesheet('SpriteTheBadGuy','Assets/Sprites/ImTheBadGuy.png',
             { frameWidth: 32, frameHeight: 64 });
 
         //#region Load Image
@@ -171,8 +171,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.SpriteFireUn = this.fire.create(176, 1600, 'SpriteFire').setSize(32,25).setOffset(0,7);
     
 
-
-        //Level 3
+//region Feu
         this.SpriteFireUn = this.fire.create(496,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
         this.SpriteFireUn = this.fire.create(528,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
         this.SpriteFireUn = this.fire.create(560,1264, 'SpriteFire').setSize(32,25).setOffset(0,7);
@@ -213,7 +212,8 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             
         this.SpriteFireUn = this.fire.create(1360,976, 'SpriteFire').setSize(32,25).setOffset(0,7);
         this.SpriteFireUn = this.fire.create(1392,976, 'SpriteFire').setSize(32,25).setOffset(0,7);
-        //feu Verticale ************************************************************************************************************************************************************************************
+//endregion FEU
+    //feu Verticale ************************************************************************************************************************************************************************************
 
         this.SpriteFireInvertTrois = this.fire.create(464, 496, 'SpriteFire');
             this.SpriteFireInvertTrois.setFlipY(true);
@@ -272,12 +272,6 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             this.SpriteFireInvertTrois.angle = 90;
         this.SpriteFireInvertTrois = this.fire.create(368, 1008, 'SpriteFire');
             this.SpriteFireInvertTrois.angle = 90;
-
-
-
-
-
-
 
         //*******************************************************************************************************************************************************
 
@@ -390,9 +384,19 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         //******************************* The bad guy  ***********************************
 
-        this.BadGuy = this.physics.add.group({ allowGravity : false, collideWorldBounds: true});
-        this.BadGuylvl1 = this.BadGuy.create(300,64);
-        this.BadGuylvl1.body.allowGravity = false;
+
+        this.BadGuyLeft = this.physics.add.group({ allowGravity : false, collideWorldBounds: true});
+            this.BadGuyLeftUn = this.BadGuyLeft.create(100,300, 'SpriteBadGuyLeft').setSize(50,45).setOffset(-15,19);
+        this.BadGuyLeftUn.body.allowGravity = false;
+
+
+        this.BadGuyRight = this.physics.add.group({ allowGravity : false, collideWorldBounds: true});
+            this.BadGuyRightUn = this.BadGuyRight.create(48,703, 'SpriteBadGuyRight').setSize(50,45).setOffset(-3,19);
+        this.BadGuyRightUn.body.allowGravity = false;
+
+       
+
+
 
         //
         //Level 1 HealthPotions
@@ -536,7 +540,8 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
 
         this.physics.add.overlap(this.player, this.fire, this.JePerdsDeLaVieOhMonDieu, null, this);
-        this.physics.add.overlap(this.player,this.BadGuy, this.JePerdsDeLaVieOhMonDieu, null, this);
+        this.physics.add.overlap(this.player,this.BadGuyRight, this.JePerdsDeLaVieOhMonDieu, null, this);
+        this.physics.add.overlap(this.player,this.BadGuyLeftKick, this.JePerdsDeLaVieOhMonDieu, null, this);
         
         this.physics.add.overlap(this.player, this.RedCard, this.JePossedeUneTresBelleCarteRouge, null, this)
         this.physics.add.overlap(this.player, this.YellowCard, this.JePossedeUneTresBelleCarteJaune, null, this);
@@ -554,7 +559,8 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         //********************************************************************************************************************************************************************************************
         
         this.physics.add.collider(this.player, Plateformes);
-        this.physics.add.collider(this.player, this.BadGuy);
+        this.physics.add.collider(this.player, this.BadGuyRight);
+        this.physics.add.collider(this.player, this.BadGuyLeft);
 
         //***************  COLIDERS PORTES  ************************
 
@@ -576,7 +582,6 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.physics.add.collider(this.player, this.PorteVerteUn);
         this.physics.add.collider(this.player, this.PorteVerteDeux);
         
-        
 
         this.physics.add.collider(this.player, this.PorteBleu);
         this.physics.add.collider(this.player, this.PorteBleuUn);
@@ -589,10 +594,6 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.physics.add.collider(this.player, this.PorteRougeBleuJauneVerteDeux);
         this.physics.add.collider(this.player, this.PorteRougeBleuJauneVerteTrois);
         
-      
-
-
-
         this.physics.add.collider(this.player, this.PorteRBJV);
 
         //this.cameraFilter = this.cameras.main;
@@ -606,28 +607,30 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         //****************************************** Animation for the BAD gUY *****************************************************
 
         this.anims.create({
-            key: 'BadguyStandingFacingRight',
-            frames: this.anims.generateFrameNumbers('TheBadGuy', {start:0,end:3}),
-            frameRate: 10,
+            key: 'SpriteBadGuyRight',
+            frames: this.anims.generateFrameNumbers('SpriteTheBadGuy', {start:0,end:3}),
+            frameRate: 6,
+            repeat: -1
+        })
+
+        
+        //this.anims.create({
+        //    key: 'SpriteBadGuyRightKicking',
+        //    frames: this.anims.generateFrameNumbers('SpriteTheBadGuy', {start:11,end:13}),
+        //    frameRate: 10,
+        //    repeat: -1
+        //})
+//
+        this.anims.create({
+            key: 'SpriteBadGuyLeft',
+            frames: this.anims.generateFrameNumbers('SpriteTheBadGuy', {start:5,end:8}),
+            frameRate: 6,
             repeat: -1
         })
 
         this.anims.create({
-            key: 'BadguyStandingFacingLeft',
-            frames: this.anims.generateFrameNumbers('TheBadGuy', {start:6,end:9}),
-            frameRate: 10,
-            repeat: -1
-        })
-        this.anims.create({
-            key: 'BadguyStandingFacingRightKicking',
-            frames: this.anims.generateFrameNumbers('TheBadGuy', {start:11,end:13}),
-            frameRate: 10,
-            repeat: -1
-        })
-        
-        this.anims.create({
-            key: 'BadguyStandingFacingLeftKicking',
-            frames: this.anims.generateFrameNumbers('TheBadGuy', {start:15,end:17}),
+            key: 'SpriteBadGuyLeftKicking',
+            frames: this.anims.generateFrameNumbers('SpriteTheBadGuy', {start:14,end:16}),
             frameRate: 10,
             repeat: -1
         })
@@ -777,6 +780,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             }   
     }
 
+
         //***********************************************        PRENDRE LES COLLECTIBLES      *******************************************************************
 
     JePossedeUneTresBelleCarteRouge(player, RedCard){
@@ -877,7 +881,6 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             this.PorteVerte.disableBody(true, true)
             console.log("Miaow!! Purrrrr-Fect !!");
         }
-
         if (this.player.x >= 1350 && this.player.y <= 1472 && this.player.x <= 1550 && this.player.y >= 1350 && this.CarteVerteDeLaMortQuiTue == true){
             this.PorteVerteUn.disableBody(true, true)
             console.log("Miaow!! Purrrrr-Fect !!");
@@ -929,12 +932,10 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             this.PorteJauneTrois.disableBody(true, true)
             console.log("Miaow!! Purrrrr-Fect !!");
         }
-
         if (this.player.x >= 1104 && this.player.y <= 736 && this.player.x <= 1168 && this.player.y >=672 && this.CarteRougeDeLaMortQuiTue == true){
             this.PorteRougeTrois.disableBody(true, true)
             console.log("Miaow!! I gotta good feline about this");
         }
-
         if (this.player.x >= 1232 && this.player.y <= 544 && this.player.x <= 448 && this.player.y >= 1328 && this.CarteBleuDeLaMortQuiTue == true){
             this.PorteBleuTrois.disableBody(true, true)
             console.log("Miaow!! I gotta good feline about this");
@@ -951,12 +952,10 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             this.PorteRougeBleuJauneVerteDeux.disableBody(true, true)
             console.log("Miaow we are going to make hiiiiissss-tory");
         }
-
         if (this.player.x >= 880 && this.player.y <= 832 && this.player.x <= 1008 && this.player.y >= 736 && this.CarteRougeDeLaMortQuiTue == true && this.CarteBleuDeLaMortQuiTue == true && this.CarteJauneDeLaMortQuiTue == true && this.CarteVerteDeLaMortQuiTue == true) {
             this.PorteRougeBleuJauneVerteTrois.disableBody(true, true)
             console.log("Miaow we are going to make hiiiiissss-tory");
         }
-
         if (this.player.x >= 880 && this.player.y <= 832 && this.player.x <= 1008 && this.player.y >= 736 && this.CarteRougeDeLaMortQuiTue == true && this.CarteBleuDeLaMortQuiTue == true && this.CarteJauneDeLaMortQuiTue == true && this.CarteVerteDeLaMortQuiTue == true) {
             this.PorteRougeBleuJauneVerteTrois.disableBody(true, true)
             console.log("I made It");
@@ -965,9 +964,18 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 // ************************************************************         Groupe d'animation          *******************************************************************     
 
 
-        this.BadGuy.children.each(function(SpriteBadGuy){
-            SpriteBadGuy.anims.play("BadGuyStandingFacingRight")
+        this.BadGuyRight.children.each(function(SpriteBadGuyRight){
+            SpriteBadGuyRight.anims.play("SpriteBadGuyRight", true)
         },this);
+        
+        this.BadGuyLeft.children.each(function(SpriteBadGuyLeft){
+            SpriteBadGuyLeft.anims.play("SpriteBadGuyLeft", true)
+        },this);
+
+        //this.BadGuyLeftKick.children.each(function(SpriteBadGuyLeftKick){
+        //    SpriteBadGuyLeftKick.anims.play("SpriteBadGuyLeftKick", true)
+        //},this);
+
 
     // Animation - Feu
 
@@ -1009,6 +1017,10 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         if (this.gameOver == true){return;}
         
+        //if(this.player.overlap.BadGuyLeft){
+        //    this.BadGuyLeft.anims.play('SpriteBadGuyLeftKick', true);
+        //    this.player.setVelocityX(-450);
+        //}
         if (this.clavier.Q.isDown && !this.onWallGauche && ! this.walljump){ //si la touche gauche est appuyée
             this.player.setVelocityX(-160); //alors vitesse négative en X
             this.player.anims.play('left', true); //et animation => gauche
@@ -1102,8 +1114,6 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             this.onWallGauche = false;
         
         }
-
-
         if(this.player.body.blocked.down){
         
             // hero can jump
