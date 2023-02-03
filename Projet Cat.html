@@ -385,14 +385,14 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         //******************************* The bad guy  ***********************************
 
 
-        this.BadGuyLeft = this.physics.add.group({ allowGravity : false, collideWorldBounds: true});
+        this.BadGuyLeft = this.physics.add.group({ allowGravity : true, collideWorldBounds: true});
             this.BadGuyLeftUn = this.BadGuyLeft.create(100,300, 'SpriteBadGuyLeft').setSize(50,45).setOffset(-15,19);
-        this.BadGuyLeftUn.body.allowGravity = false;
+
 
 
         this.BadGuyRight = this.physics.add.group({ allowGravity : false, collideWorldBounds: true});
             this.BadGuyRightUn = this.BadGuyRight.create(48,703, 'SpriteBadGuyRight').setSize(50,45).setOffset(-3,19);
-        this.BadGuyRightUn.body.allowGravity = false;
+       
 
        
 
@@ -559,8 +559,9 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         //********************************************************************************************************************************************************************************************
         
         this.physics.add.collider(this.player, Plateformes);
-        this.physics.add.collider(this.player, this.BadGuyRight);
-        this.physics.add.collider(this.player, this.BadGuyLeft);
+
+        this.physics.add.collider(this.BadGuyLeft, Plateformes);
+
 
         //***************  COLIDERS PORTES  ************************
 
@@ -972,10 +973,6 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             SpriteBadGuyLeft.anims.play("SpriteBadGuyLeft", true)
         },this);
 
-        //this.BadGuyLeftKick.children.each(function(SpriteBadGuyLeftKick){
-        //    SpriteBadGuyLeftKick.anims.play("SpriteBadGuyLeftKick", true)
-        //},this);
-
 
     // Animation - Feu
 
@@ -1017,10 +1014,10 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         if (this.gameOver == true){return;}
         
-        //if(this.player.overlap.BadGuyLeft){
-        //    this.BadGuyLeft.anims.play('SpriteBadGuyLeftKick', true);
-        //    this.player.setVelocityX(-450);
-        //}
+       if(this.player.overlap.BadGuyLeft){
+           this.BadGuyLeft.anims.play('SpriteBadGuyLeftKick', true);
+            this.player.setVelocityX(-450);
+        }
         if (this.clavier.Q.isDown && !this.onWallGauche && ! this.walljump){ //si la touche gauche est appuyée
             this.player.setVelocityX(-160); //alors vitesse négative en X
             this.player.anims.play('left', true); //et animation => gauche
