@@ -401,7 +401,8 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.BadGuyRight = this.physics.add.group({ allowGravity : false, collideWorldBounds: true});
             this.BadGuyRightUn = this.BadGuyRight.create(48,703, 'SpriteBadGuyRight').setSize(50,45).setOffset(-3,19);
        
-        //
+
+
         //Level 1 HealthPotions
         //Physique de la potion de la potion de soin / croquette!**************************************************************************************
         this.HealthPotion= this.physics.add.group({ allowGravity : false, collideWorldBounds: true});
@@ -543,51 +544,73 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         console.log("It's my meow-ment!!")
 
 
-
+       
+                        
 
         var Statics1 = this.add.text(390,400,"*Statics*",{fontSize: '20px', fill: '#fff'}).setScale(1).setScrollFactor(0);
-                    this.time.delayedCall(10000,function(){
+                    this.time.delayedCall(3000,function(){
                         Statics1.destroy();
                         },[],this)
 
         var Statics2 = this.add.text(390,470,"*Statics*",{fontSize: '20px', fill: '#fff'}).setScale(1).setScrollFactor(0);
-                    this.time.delayedCall(10000,function(){
+                    this.time.delayedCall(3000,function(){
                         Statics2.destroy();
                         },[],this)
 
         var Phrase1= this.add.text(320,440,"*Percy are you there?*",{fontSize: '20px', fill: '#fff'}).setScale(1).setScrollFactor(0);
-                    this.time.delayedCall(2000,function(){
+                    this.time.delayedCall(1500,function(){
                         Phrase1.destroy();
                         },[],this)
         
         var Phrase2= this.add.text(300,445,"*Percy are you there?*",{fontSize: '20px', fill: '#fff'}).setScale(1).setScrollFactor(0);
-                    this.time.delayedCall(2000,function(){
+                    this.time.delayedCall(1500,function(){
                         Phrase2.destroy();
                         },[],this)
 
-        var phrase3= this.add.text(300,440,"Percy !! It's CATastrophique!!",{fontSize: '15px', fill: '#fff'}).setScale(1).setScrollFactor(0);
+        var phrase3= this.add.text(285,440,"PERCY !! It's CATastrophic!!",{fontSize: '20px', fill: '#fff'}).setScale(1).setScrollFactor(0);
                     phrase3.setVisible(false);
 
                     this.time.delayedCall(2000, function() {
                         phrase3.setVisible(true);
                         }, [], this);
             
-                    this.time.delayedCall(6000, function() {
+                    this.time.delayedCall(4500, function() {
                         phrase3.destroy();
                         }, [], this);
         
-        var phrase4 = this.add.text(300,440,"You are our only hope!!",{fontSize: '15px', fill: '#fff'}).setScale(1).setScrollFactor(0);
+
+        var phrase4= this.add.text(300,440,"Furever-city needs you !!",{fontSize: '20px', fill: '#fff'}).setScale(1).setScrollFactor(0);
                     phrase4.setVisible(false);
 
-                    this.time.delayedCall(7000, function() {
+                    this.time.delayedCall(5000, function() {
                         phrase4.setVisible(true);
                         }, [], this);
             
-                    this.time.delayedCall(6000, function() {
+                    this.time.delayedCall(7000, function() {
                         phrase4.destroy();
                         }, [], this);
-            
 
+        var phrase5= this.add.text(285,440,"You need to get to the Bio-terrorist base! ",{fontSize: '13px', fill: '#fff'}).setScale(1).setScrollFactor(0);
+                    phrase5.setVisible(false);
+
+                    this.time.delayedCall(7500, function() {
+                        phrase5.setVisible(true);
+                        }, [], this);
+            
+                    this.time.delayedCall(10000, function() {
+                        phrase5.destroy();
+                        }, [], this);           
+
+        var phrase6= this.add.text(280,440,"And Bring back the formula..*statics*",{fontSize: '15px', fill: '#fff'}).setScale(1).setScrollFactor(0);
+                    phrase6.setVisible(false);
+
+                    this.time.delayedCall(11000, function() {
+                        phrase6.setVisible(true);
+                        }, [], this);
+            
+                    this.time.delayedCall(14000, function() {
+                        phrase6.destroy();
+                        }, [], this);
 
 
         this.player.setCollideWorldBounds(true);   
@@ -606,6 +629,18 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
 
         this.physics.add.overlap(this.player, this.coin, this.JeRecolteMesPiecesDeMonnaie, null, this);
+            
+
+                this.physics.add.overlap(this.coin, this.player,function(){
+                
+                    var coinUp = this.add.text(420,233, "+1$",{fontSize: '30px', fill: '#fff'}).setScale(1).setScrollFactor(0);
+
+                       this.time.delayedCall(2000, function(){
+                           coinUp.destroy();
+                       },[],this);
+                   
+                },null,this);
+    
         this.physics.add.overlap(this.player, this.HealthPotion, this.MiamMiamLesBonnesCroquettes, null, this);
         
         this.physics.add.overlap(this.player,this.SpriteBoxVide, this.JeTrouveMonPremierPouvoir,null,this);
@@ -890,6 +925,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
     JeRecolteMesPiecesDeMonnaie(player, coin){
         coin.disableBody(true, true);
         this.nombreargent += 1 ;
+        
         console.log("Miew Miew a Gold Coin!!");
     }
 
