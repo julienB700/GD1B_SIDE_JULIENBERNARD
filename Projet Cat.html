@@ -395,8 +395,8 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         
             this.BadGuyLeft = this.physics.add.group({ allowGravity : true, collideWorldBounds: true});
-            this.BadGuyLeftUn = this.BadGuyLeft.create(1590,150, 'SpriteBadGuyLeft').setSize(50,45).setOffset(-15,19);
-    
+            this.BadGuyLeftUn = this.BadGuyLeft.create(1590,100, 'SpriteBadGuyLeft').setSize(50,45).setOffset(-15,19);
+            //this.BadGuyLeftUn.setCircle(20);
 
             //this.BadGuyLeftUn.setCircle(20);
 
@@ -550,7 +550,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         Plateformes.setCollisionByProperty({ estSolide: true });
         
         this.player = this.physics.add.sprite(0,400, 'perso').setSize(20,20).setOffset(5,12); //SPAWN LEVEL 1 0.400  : LEVEL 2 1552, 384 LEVEL 3 
-        this.player.setCircle(10)
+        //this.player.setCircle(10)
         this.player.invulnerable = false;
 
 
@@ -637,6 +637,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.physics.add.overlap(this.player, this.GreenCard, this.JePossedeUneTresBelleCarteVerte, null, this);
 
         this.physics.add.overlap(this.player, this.BadGuyLeftUn, this.EnnemiAttaque, null, this);
+        this.physics.add.overlap(this.player, this.SpriteHitboxAttaqueEnnemi, this.LeChatEstEjecte, null, this);
 
 
         this.physics.add.overlap(this.player, this.coin, this.JeRecolteMesPiecesDeMonnaie, null, this);
@@ -664,6 +665,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         this.physics.add.collider(this.BadGuyLeft, Plateformes);
 
+    
 
         //***************  COLIDERS PORTES  ************************
 
@@ -694,7 +696,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         this.physics.world.setBounds(0, 0, 1600, 1600); 
         this.cameras.main.setBounds(0, 0, 1600, 1600);
-        this.cameras.main.zoom =0.5; //2.5
+        this.cameras.main.zoom =2.5; //2.5
         this.cameras.main.startFollow(this.player);
         
   
@@ -720,13 +722,13 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             key: 'SpriteBadGuyLeft',
             frames: this.anims.generateFrameNumbers('SpriteTheBadGuy', {start:5,end:8}),
             frameRate: 6,
-            repeat: -1
+            repeat: 0,
         })
 
         this.anims.create({
             key: 'SpriteBadGuyLeftKicking',
             frames: this.anims.generateFrameNumbers('SpriteTheBadGuy', {start:14,end:16}),
-            frameRate: 10,
+            frameRate: 1,
             repeat: 0,
         })
 
@@ -882,7 +884,6 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
     JePerdsDeLaVieOhMonDieu(player, fire){
         player.setTint( 0xff0000 );
-
             if (player.scene.Nombredevieperdu == 0){
                 console.log("Smell like burnt Cat in here !!")
                 player.scene.Nombredevieperdu += 1;
@@ -892,18 +893,30 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
     }
 
     EnnemiAttaque(player, BadGuyLeftUn){ 
+        
         this.EnnemiEnAttaque = true
-        this.BadGuyLeftUn.anims.play('SpriteBadGuyLeftKicking', true);
+        
         this.sleep(800).then(() => {
             this.SpriteHitboxAttaqueEnnemi.x = this.BadGuyLeftUn.x - 32;
             this.SpriteHitboxAttaqueEnnemi.y = this.BadGuyLeftUn.y;
-            this.sleep(800).then(() => {
+            this.sleep(400).then(() => {
                 this.SpriteHitboxAttaqueEnnemi.x = 0;
                 this.SpriteHitboxAttaqueEnnemi.y = 0;
         })})
         }
 
+        LeChatEstEjecte(player, SpriteHitboxAttaqueEnnemi){
+            this.BadGuyLeftUn.anims.play('SpriteBadGuyLeftKicking', true);
+            this.mespointsdevie -= 1; 
+            this.player.invulnerable = true;
+            this.player.body.allowGravity = false;
+            this.player.setVelocityX(-300);
+            this.player.setVelocityY(-200);
+            this.sleep(100).then(() => {
+                this.player.body.allowGravity = true;
 
+            })
+        }
         //***********************************************        PRENDRE LES COLLECTIBLES      *******************************************************************
 
     JePossedeUneTresBelleCarteRouge(player, RedCard){
@@ -958,16 +971,16 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
     update(){
 
-
+        this.BadGuyLeftUn.anims.play('SpriteBadGuyLeft', true);
         if(this.BadGuyLeftUn.x <= 1530){
-                this.BadGuyLeftUn.setVelocityX(40); 
-                this.BadGuyLeftUn.anims.play('SpriteBadGuyRight', true); 
-            }
-            else if(this.BadGuyLeftUn.x >= 1580){
-                this.BadGuyLeftUn.setVelocityX(-40); 
-                this.BadGuyLeftUn.anims.play('SpriteBadGuyLeft', true); 
-            }
-
+            this.BadGuyLeftUn.setVelocityX(40); 
+            this.BadGuyLeftUn.anims.play('SpriteBadGuyRight', true); 
+        }
+        else if(this.BadGuyLeftUn.x >= 1580){
+            this.BadGuyLeftUn.setVelocityX(-40); 
+            this.BadGuyLeftUn.anims.play('SpriteBadGuyLeft', true); 
+        }
+        
 
         if (this.timer == true){
             if (this.chrono < 360){
