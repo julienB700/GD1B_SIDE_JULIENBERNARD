@@ -77,6 +77,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.CarteBleuDeLaMortQuiTue = false;
         this.CarteVerteDeLaMortQuiTue = false;
         this.CarteJauneDeLaMortQuiTue = false;
+        this.EnnemiEnAttaque = false;
 
 
         this.CapaciteDebloquee = false;
@@ -394,8 +395,8 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         
             this.BadGuyLeft = this.physics.add.group({ allowGravity : true, collideWorldBounds: true});
-            this.BadGuyLeftUn = this.BadGuyLeft.create(100,300, 'SpriteBadGuyLeft').setSize(50,45).setOffset(-15,19);
-            this.BadGuyLeftUn.setCircle(20);
+            this.BadGuyLeftUn = this.BadGuyLeft.create(1590,150, 'SpriteBadGuyLeft').setSize(50,45).setOffset(-15,19);
+    
 
             //this.BadGuyLeftUn.setCircle(20);
 
@@ -540,6 +541,9 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         this.SpriteBoxVide = this.physics.add.sprite(1520, 384, 'SpriteBoxVide').setSize(25, 64);
         this.SpriteBoxVide.body.allowGravity = false;
+
+        this.SpriteHitboxAttaqueEnnemi = this.physics.add.sprite(1520, 384, 'SpriteBoxVide').setSize(25, 50);
+        this.SpriteHitboxAttaqueEnnemi.body.allowGravity = false;
         
 
         //***********************************************************************          SPAWN         *********************************************************************************
@@ -632,6 +636,8 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.physics.add.overlap(this.player, this.BlueCard, this.JePossedeUneTresBelleCarteBleu, null, this);
         this.physics.add.overlap(this.player, this.GreenCard, this.JePossedeUneTresBelleCarteVerte, null, this);
 
+        this.physics.add.overlap(this.player, this.BadGuyLeftUn, this.EnnemiAttaque, null, this);
+
 
         this.physics.add.overlap(this.player, this.coin, this.JeRecolteMesPiecesDeMonnaie, null, this);
             
@@ -657,33 +663,6 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.physics.add.collider(this.player, Plateformes);
 
         this.physics.add.collider(this.BadGuyLeft, Plateformes);
-
-        //this.physics.add.collider(this.BadGuyLeftUn, this.player, function(){
-        //    
-        //    if (this.player.invulnerable = false){
-        //        this.mespointsdevie -= 1;
-        //        this.player.invulnerable = true;
-        //        var angle = Phaser.Math.Angle.Between(this.BadGuyLeftUn.x,this.BadGuyLeftUn.y, this.player.x,this.player.y);
-        //        this.player.body.velocity.x += Math.cos(angle) * 100;
-        //        this.player.body.velocity.y += Math.sin(angle) * 100;
-//
-        //        this.time.delayedCall(2000,function(){
-        //            this.player.invulnerable = false;
-        //            }, [], this);
-//
-        //        }
-        //        });
-
-            this.physics.add.collider(this.BadGuyLeftUn, this.player, function(){
-                var angle = Phaser.Math.Distance.Between(this.BadGuyLeftUn.x,this.BadGuyLeftUn.y, this.player.x,this.player.y);
-                if(distance < 30) {
-                this.mespointsdevie -= 1;
-                var angle = Phaser.Math.Angle.Between(this.BadGuyLeftUn.x,this.BadGuyLeftUn.y, this.player.x,this.player.y);
-                this.player.body.velocity.x += Math.cos(angle) * 100;
-                this.player.body.velocity.y += Math.sin(angle) * 100;
-                }
-                });
-
 
 
         //***************  COLIDERS PORTES  ************************
@@ -715,7 +694,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         this.physics.world.setBounds(0, 0, 1600, 1600); 
         this.cameras.main.setBounds(0, 0, 1600, 1600);
-        this.cameras.main.zoom =2.5; //2.5
+        this.cameras.main.zoom =0.5; //2.5
         this.cameras.main.startFollow(this.player);
         
   
@@ -748,7 +727,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             key: 'SpriteBadGuyLeftKicking',
             frames: this.anims.generateFrameNumbers('SpriteTheBadGuy', {start:14,end:16}),
             frameRate: 10,
-            repeat: -1
+            repeat: 0,
         })
 
         //***************************************** The Feu qui brule *****************************************
@@ -911,17 +890,19 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             }   
 
     }
-    
-    JeprendsUnCoupDePied(player,BadGuyLeft){
-        player.setTint( 0xff0000 );
 
-        if (player.scene.Nombredevieperdu == 0){
-                console.log("Smell like burnt Cat in here !!")
-                player.scene.Nombredevieperdu += 1;
-                this.physics.pause();
-            }   
+    EnnemiAttaque(player, BadGuyLeftUn){ 
+        this.EnnemiEnAttaque = true
+        this.BadGuyLeftUn.anims.play('SpriteBadGuyLeftKicking', true);
+        this.sleep(800).then(() => {
+            this.SpriteHitboxAttaqueEnnemi.x = this.BadGuyLeftUn.x - 32;
+            this.SpriteHitboxAttaqueEnnemi.y = this.BadGuyLeftUn.y;
+            this.sleep(800).then(() => {
+                this.SpriteHitboxAttaqueEnnemi.x = 0;
+                this.SpriteHitboxAttaqueEnnemi.y = 0;
+        })})
+        }
 
-    }
 
         //***********************************************        PRENDRE LES COLLECTIBLES      *******************************************************************
 
@@ -976,6 +957,17 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
     
 
     update(){
+
+
+        if(this.BadGuyLeftUn.x <= 1530){
+                this.BadGuyLeftUn.setVelocityX(40); 
+                this.BadGuyLeftUn.anims.play('SpriteBadGuyRight', true); 
+            }
+            else if(this.BadGuyLeftUn.x >= 1580){
+                this.BadGuyLeftUn.setVelocityX(-40); 
+                this.BadGuyLeftUn.anims.play('SpriteBadGuyLeft', true); 
+            }
+
 
         if (this.timer == true){
             if (this.chrono < 360){
@@ -1285,6 +1277,9 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             this.onWallGauche = true;
             this.player.anims.play('OnWallL', true)
         }
+        }
+        sleep = (milliseconds) => {
+            return new Promise(resolve => setTimeout(resolve, milliseconds));
         }
     }
     var config = {
