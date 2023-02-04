@@ -620,7 +620,6 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         this.physics.add.overlap(this.player, this.fire, this.JePerdsDeLaVieOhMonDieu, null, this);
         this.physics.add.overlap(this.player,this.BadGuyRight, this.JePerdsDeLaVieOhMonDieu, null, this);
-        //this.physics.add.overlap(this.player,this.BadGuyLeftKick, this.JePerdsDeLaVieOhMonDieu, null, this);
         
         this.physics.add.overlap(this.player, this.RedCard, this.JePossedeUneTresBelleCarteRouge, null, this)
         this.physics.add.overlap(this.player, this.YellowCard, this.JePossedeUneTresBelleCarteJaune, null, this);
@@ -652,6 +651,13 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.physics.add.collider(this.player, Plateformes);
 
         this.physics.add.collider(this.BadGuyLeft, Plateformes);
+
+        this.physics.add.collider(this.BadGuyLeft, this.player, function(){
+            var distance = phaser.Math.Distance.Between(this.BadGuyLeft.x, this.BadGuyLeft.y, this.player.x, this.player.y);
+            if (distance < 30){
+                this.mespointsdevie - 1;
+            }
+        });
 
 
         //***************  COLIDERS PORTES  ************************
