@@ -392,13 +392,18 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         //******************************* The bad guy  ***********************************
 
-
-        this.BadGuyLeft = this.physics.add.group({ allowGravity : true, collideWorldBounds: true});
+        
+            this.BadGuyLeft = this.physics.add.group({ allowGravity : true, collideWorldBounds: true});
             this.BadGuyLeftUn = this.BadGuyLeft.create(100,300, 'SpriteBadGuyLeft').setSize(50,45).setOffset(-15,19);
+            this.BadGuyLeftUn.setCircle(20);
+
+            //this.BadGuyLeftUn.setCircle(20);
 
 
 
-        this.BadGuyRight = this.physics.add.group({ allowGravity : false, collideWorldBounds: true});
+        
+        
+            this.BadGuyRight = this.physics.add.group({ allowGravity : false, collideWorldBounds: true});
             this.BadGuyRightUn = this.BadGuyRight.create(48,703, 'SpriteBadGuyRight').setSize(50,45).setOffset(-3,19);
        
 
@@ -541,6 +546,9 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         Plateformes.setCollisionByProperty({ estSolide: true });
         
         this.player = this.physics.add.sprite(0,400, 'perso').setSize(20,20).setOffset(5,12); //SPAWN LEVEL 1 0.400  : LEVEL 2 1552, 384 LEVEL 3 
+        this.player.setCircle(10)
+        this.player.invulnerable = false;
+
         console.log("It's my meow-ment!!")
 
 
@@ -631,7 +639,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             
 
                 this.physics.add.overlap(this.coin, this.player,function(){
-                
+                //ne fonctionne pas pour le moment
                     var coinUp = this.add.text(420,233, "+1$",{fontSize: '30px', fill: '#fff'}).setScale(1).setScrollFactor(0);
 
                        this.time.delayedCall(2000, function(){
@@ -652,13 +660,21 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         this.physics.add.collider(this.BadGuyLeft, Plateformes);
 
-        this.physics.add.collider(this.BadGuyLeft, this.player, function(){
-            var distance = phaser.Math.Distance.Between(this.BadGuyLeft.x, this.BadGuyLeft.y, this.player.x, this.player.y);
-            if (distance < 30){
-                this.mespointsdevie - 1;
-            }
-        });
+        this.physics.add.collider(this.BadGuyLeftUn, this.player, function(){
+            
+            if (this.player.invulnerable = false){
+                this.mespointsdevie -= 1;
+                this.player.invulnerable = true;
+                var angle = Phaser.Math.Angle.Between(this.BadGuyLeftUn.x,this.BadGuyLeftUn.y, this.player.x,this.player.y);
+                this.player.body.velocity.x += Math.cos(angle) * 100;
+                this.player.body.velocity.y += Math.sin(angle) * 100;
 
+                this.time.delayedCall(2000,function(){
+                    this.player.invulnerable = false;
+                    }, [], this);
+
+                }
+                });
 
         //***************  COLIDERS PORTES  ************************
 
@@ -1146,11 +1162,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
 
         if (this.gameOver == true){return;}
-        
-        //if(this.player.overlap.BadGuyLeft){
-        //   this.BadGuyLeft.anims.play('SpriteBadGuyLeftKick', true);
-        //    this.player.setVelocityX(-450);
-        //}
+    
 
         if (this.clavier.Q.isDown && !this.onWallGauche && ! this.walljump){ //si la touche gauche est appuyée
             this.player.setVelocityX(-160); //alors vitesse négative en X
