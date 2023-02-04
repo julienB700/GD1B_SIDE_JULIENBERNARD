@@ -549,8 +549,6 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.player.setCircle(10)
         this.player.invulnerable = false;
 
-        console.log("It's my meow-ment!!")
-
 
        
                         
@@ -660,21 +658,33 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         this.physics.add.collider(this.BadGuyLeft, Plateformes);
 
-        this.physics.add.collider(this.BadGuyLeftUn, this.player, function(){
-            
-            if (this.player.invulnerable = false){
+        //this.physics.add.collider(this.BadGuyLeftUn, this.player, function(){
+        //    
+        //    if (this.player.invulnerable = false){
+        //        this.mespointsdevie -= 1;
+        //        this.player.invulnerable = true;
+        //        var angle = Phaser.Math.Angle.Between(this.BadGuyLeftUn.x,this.BadGuyLeftUn.y, this.player.x,this.player.y);
+        //        this.player.body.velocity.x += Math.cos(angle) * 100;
+        //        this.player.body.velocity.y += Math.sin(angle) * 100;
+//
+        //        this.time.delayedCall(2000,function(){
+        //            this.player.invulnerable = false;
+        //            }, [], this);
+//
+        //        }
+        //        });
+
+            this.physics.add.collider(this.BadGuyLeftUn, this.player, function(){
+                var angle = Phaser.Math.Distance.Between(this.BadGuyLeftUn.x,this.BadGuyLeftUn.y, this.player.x,this.player.y);
+                if(distance < 30) {
                 this.mespointsdevie -= 1;
-                this.player.invulnerable = true;
                 var angle = Phaser.Math.Angle.Between(this.BadGuyLeftUn.x,this.BadGuyLeftUn.y, this.player.x,this.player.y);
                 this.player.body.velocity.x += Math.cos(angle) * 100;
                 this.player.body.velocity.y += Math.sin(angle) * 100;
-
-                this.time.delayedCall(2000,function(){
-                    this.player.invulnerable = false;
-                    }, [], this);
-
                 }
                 });
+
+
 
         //***************  COLIDERS PORTES  ************************
 
