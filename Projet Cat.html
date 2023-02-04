@@ -9,9 +9,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 <body>
 <script type="text/javascript">
 
-    
 
-    
 
     class monjeu extends Phaser.Scene{
             constructor() {
@@ -20,7 +18,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
     preload(){
 
-        // *************************************************************************************Les Différents sprites :
+        // *************************************************************************************     Les Différents sprites ***************************************************
 
         this.load.spritesheet('SpriteFire','Assets/Sprites/SpriteFire.png',
             { frameWidth: 32, frameHeight: 32 });
@@ -68,6 +66,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         this.load.spritesheet('perso','Assets/cat.png',
         { frameWidth: 32, frameHeight: 32});
+        
         //#endregion Load Image
     }
 
@@ -212,6 +211,8 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             
         this.SpriteFireUn = this.fire.create(1360,976, 'SpriteFire').setSize(32,25).setOffset(0,7);
         this.SpriteFireUn = this.fire.create(1392,976, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1104,592, 'SpriteFire').setSize(32,25).setOffset(0,7);
+        this.SpriteFireUn = this.fire.create(1008,592, 'SpriteFire').setSize(32,25).setOffset(0,7);
 //endregion FEU
     //feu Verticale ************************************************************************************************************************************************************************************
 
@@ -368,8 +369,6 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.SpriteCoinUn = this.coin.create(432, 1008, 'SpriteCoin').setSize(23,27).setOffset(5,0);
 
 
-
-        
     
         this.SpriteCoinUn = this.coin.create(592, 688, 'SpriteCoin').setSize(23,27).setOffset(5,0);
         this.SpriteCoinUn = this.coin.create(624, 816, 'SpriteCoin').setSize(23,27).setOffset(5,0);
@@ -379,6 +378,15 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.SpriteCoinUn = this.coin.create(592, 624, 'SpriteCoin').setSize(23,27).setOffset(5,0);
         this.SpriteCoinUn = this.coin.create(624, 624, 'SpriteCoin').setSize(23,27).setOffset(5,0);
         this.SpriteCoinUn = this.coin.create(656, 624, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+
+        this.SpriteCoinUn = this.coin.create(1072, 1168, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(976, 1200, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(1168, 1200, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+
+        this.SpriteCoinUn = this.coin.create(1392, 688, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(1360, 688, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+        this.SpriteCoinUn = this.coin.create(1328, 688, 'SpriteCoin').setSize(23,27).setOffset(5,0);
+
 
 
 
@@ -393,11 +401,6 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.BadGuyRight = this.physics.add.group({ allowGravity : false, collideWorldBounds: true});
             this.BadGuyRightUn = this.BadGuyRight.create(48,703, 'SpriteBadGuyRight').setSize(50,45).setOffset(-3,19);
        
-
-       
-
-
-
         //
         //Level 1 HealthPotions
         //Physique de la potion de la potion de soin / croquette!**************************************************************************************
@@ -413,10 +416,14 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.HeathpotionpUn = this.HealthPotion.create(1552, 1536, 'SpriteHealthPotion');
         this.HeathpotionpUn = this.HealthPotion.create(1232, 1536, 'SpriteHealthPotion');
         this.HeathpotionpUn = this.HealthPotion.create(1040, 1536, 'SpriteHealthPotion');
+        this.HeathpotionpUn = this.HealthPotion.create(48,1000, 'SpriteHealthPotion');
 
 
-
+        this.HeathpotionpUn = this.HealthPotion.create(368, 1168, 'SpriteHealthPotion');
+        this.HeathpotionpUn = this.HealthPotion.create(432, 1264, 'SpriteHealthPotion');
+        this.HeathpotionpUn = this.HealthPotion.create(1392, 512, 'SpriteHealthPotion');
         this.HeathpotionpUn = this.HealthPotion.create(560, 624, 'SpriteHealthPotion');
+
         //*******************************************************Level 1 / 2 / 3 Cards *******************************************************************
         // RED CARS
         this.RedCard= this.physics.add.group({ allowGravity : false, collideWorldBounds: true});
@@ -532,8 +539,57 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         //***********************************************************************          SPAWN         *********************************************************************************
         Plateformes.setCollisionByProperty({ estSolide: true });
         
-        this.player = this.physics.add.sprite(0,300, 'perso').setSize(20,20).setOffset(5,12); //SPAWN LEVEL 1 0.300  : LEVEL 2 1552, 384 LEVEL 3 
+        this.player = this.physics.add.sprite(0,400, 'perso').setSize(20,20).setOffset(5,12); //SPAWN LEVEL 1 0.400  : LEVEL 2 1552, 384 LEVEL 3 
         console.log("It's my meow-ment!!")
+
+
+
+
+        var Statics1 = this.add.text(390,400,"*Statics*",{fontSize: '20px', fill: '#fff'}).setScale(1).setScrollFactor(0);
+                    this.time.delayedCall(10000,function(){
+                        Statics1.destroy();
+                        },[],this)
+
+        var Statics2 = this.add.text(390,470,"*Statics*",{fontSize: '20px', fill: '#fff'}).setScale(1).setScrollFactor(0);
+                    this.time.delayedCall(10000,function(){
+                        Statics2.destroy();
+                        },[],this)
+
+        var Phrase1= this.add.text(320,440,"*Percy are you there?*",{fontSize: '20px', fill: '#fff'}).setScale(1).setScrollFactor(0);
+                    this.time.delayedCall(2000,function(){
+                        Phrase1.destroy();
+                        },[],this)
+        
+        var Phrase2= this.add.text(300,445,"*Percy are you there?*",{fontSize: '20px', fill: '#fff'}).setScale(1).setScrollFactor(0);
+                    this.time.delayedCall(2000,function(){
+                        Phrase2.destroy();
+                        },[],this)
+
+        var phrase3= this.add.text(300,440,"Percy !! It's CATastrophique!!",{fontSize: '15px', fill: '#fff'}).setScale(1).setScrollFactor(0);
+                    phrase3.setVisible(false);
+
+                    this.time.delayedCall(2000, function() {
+                        phrase3.setVisible(true);
+                        }, [], this);
+            
+                    this.time.delayedCall(6000, function() {
+                        phrase3.destroy();
+                        }, [], this);
+        
+        var phrase4 = this.add.text(300,440,"You are our only hope!!",{fontSize: '15px', fill: '#fff'}).setScale(1).setScrollFactor(0);
+                    phrase4.setVisible(false);
+
+                    this.time.delayedCall(7000, function() {
+                        phrase4.setVisible(true);
+                        }, [], this);
+            
+                    this.time.delayedCall(6000, function() {
+                        phrase4.destroy();
+                        }, [], this);
+            
+
+
+
         this.player.setCollideWorldBounds(true);   
 
         //***********************************************        Entrer en contact       *******************************************************************
@@ -541,7 +597,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         this.physics.add.overlap(this.player, this.fire, this.JePerdsDeLaVieOhMonDieu, null, this);
         this.physics.add.overlap(this.player,this.BadGuyRight, this.JePerdsDeLaVieOhMonDieu, null, this);
-        this.physics.add.overlap(this.player,this.BadGuyLeftKick, this.JePerdsDeLaVieOhMonDieu, null, this);
+        //this.physics.add.overlap(this.player,this.BadGuyLeftKick, this.JePerdsDeLaVieOhMonDieu, null, this);
         
         this.physics.add.overlap(this.player, this.RedCard, this.JePossedeUneTresBelleCarteRouge, null, this)
         this.physics.add.overlap(this.player, this.YellowCard, this.JePossedeUneTresBelleCarteJaune, null, this);
@@ -569,35 +625,27 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.physics.add.collider(this.player, this.PorteRougeUn);
         this.physics.add.collider(this.player, this.PorteRougeDeux);
         this.physics.add.collider(this.player, this.PorteRougeTrois);
-
         this.physics.add.collider(this.player, this.PorteJaune);
         this.physics.add.collider(this.player, this.PorteJauneUn);
         this.physics.add.collider(this.player, this.PorteJauneDeux);
         this.physics.add.collider(this.player, this.PorteJauneTrois);
-
-
         this.physics.add.collider(this.player, this.PorteRBJ);
-
-
         this.physics.add.collider(this.player, this.PorteVerte);
         this.physics.add.collider(this.player, this.PorteVerteUn);
         this.physics.add.collider(this.player, this.PorteVerteDeux);
-        
-
         this.physics.add.collider(this.player, this.PorteBleu);
         this.physics.add.collider(this.player, this.PorteBleuUn);
         this.physics.add.collider(this.player, this.PorteBleuDeux);
         this.physics.add.collider(this.player, this.PorteBleuTrois);
         this.physics.add.collider(this.player, this.PorteBleuQuatre);
-
         this.physics.add.collider(this.player, this.PorteRougeBleuJauneVerteUn);
-
         this.physics.add.collider(this.player, this.PorteRougeBleuJauneVerteDeux);
         this.physics.add.collider(this.player, this.PorteRougeBleuJauneVerteTrois);
-        
         this.physics.add.collider(this.player, this.PorteRBJV);
 
         //this.cameraFilter = this.cameras.main;
+
+
         this.physics.world.setBounds(0, 0, 1600, 1600); 
         this.cameras.main.setBounds(0, 0, 1600, 1600);
         this.cameras.main.zoom =2.5; //2.5
@@ -761,9 +809,24 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         this.mespointsdevie = 3 
         this.mespointsdevieText=this.add.text(375,233,this.mespointsdevie,{fontSize:'20px',fill:'#fff'}).setScale(1).setScrollFactor(0);
-//
-        //this.RedCardUi = 0
-        //this.RedCardText = this.add.text(450,233,this.RedCardUi,{fontSize:'20px',fill:'#fff'}).setScale(1).setScrollFactor(0);
+
+        this.RedCardUi = 0
+        this.RedCardText = this.add.text(463,233,this.RedCardUi,{fontSize:'20px',fill:'#fff'}).setScale(1).setScrollFactor(0);
+
+        this.BlueCardUi = 0
+        this.BlueCardText = this.add.text(500,233,this.BlueCardUi,{fontSize:'20px',fill:'#fff'}).setScale(1).setScrollFactor(0);
+
+        this.GreenCardUi = 0
+        this.GreenCardText = this.add.text(538,233,this.BlueCardUi,{fontSize: '20px', fill: '#fff'}).setScale(1).setScrollFactor(0);
+
+        this.YellowCardUi = 0
+        this.YellowCardText = this.add.text(575,233,this.YellowCardUi,{fontSize: '20px', fill: '#fff'}).setScale(1).setScrollFactor(0);
+
+       
+
+
+
+
 
         this.add.image(800,800,"barrieres");
         this.add.image(this.player.x+450,230, "UI").setScale(1).setScrollFactor(0);
@@ -779,15 +842,26 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
                 player.scene.Nombredevieperdu += 1;
                 this.physics.pause();
             }   
-    }
 
+    }
+    
+    JeprendsUnCoupDePied(player,BadGuyLeft){
+        player.setTint( 0xff0000 );
+
+        if (player.scene.Nombredevieperdu == 0){
+                console.log("Smell like burnt Cat in here !!")
+                player.scene.Nombredevieperdu += 1;
+                this.physics.pause();
+            }   
+
+    }
 
         //***********************************************        PRENDRE LES COLLECTIBLES      *******************************************************************
 
     JePossedeUneTresBelleCarteRouge(player, RedCard){
         RedCard.disableBody(true, true);
         this.CarteRougeDeLaMortQuiTue = true;
-        //this.RedCardUi += 1;
+        this.RedCardUi += 1;
         console.log(this.CarteRougeDeLaMortQuiTue);
         console.log("Miaow that's a red card, I can use it to open a door?! No Fuuurr-king way!");
     }
@@ -795,18 +869,20 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
     JePossedeUneTresBelleCarteJaune(player, YellowCard){
         YellowCard.disableBody(true, true);
         this.CarteJauneDeLaMortQuiTue = true;
+        this.YellowCardUi += 1;
         console.log(this.CarteJauneDeLaMortQuiTue);
     }
     JePossedeUneTresBelleCarteBleu(player, BlueCard){
         BlueCard.disableBody(true, true);
         this.CarteBleuDeLaMortQuiTue = true;
+        this.BlueCardUi += 1;
         console.log(this.CarteBleuDeLaMortQuiTue)
     }
 
     JePossedeUneTresBelleCarteVerte(player, GreenCard){
         GreenCard.disableBody(true, true);
         this.CarteVerteDeLaMortQuiTue = true;
-        
+        this.GreenCardUi += 1;
         console.log(this.CarteVerteDeLaMortQuiTue)
         console.log("Miaow that's a green card !!!");
     }
@@ -845,7 +921,14 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         this.nombreargentText.setText(this.nombreargent);
         this.mespointsdevieText.setText(this.mespointsdevie);
-        //this.RedCardText.setText(thhis.RedCardUi);
+
+        this.RedCardText.setText(this.RedCardUi);
+
+        this.BlueCardText.setText(this.BlueCardUi);
+//
+        this.YellowCardText.setText(this.YellowCardUi);
+
+        this.GreenCardText.setText(this.GreenCardUi);
 
 
         // ***************************************************************** ON FAIT DISPARAITRE LES PORTES SI LES CONDITIONS SONT REMPLIES ***********************************************
@@ -869,6 +952,9 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             this.CarteBleuDeLaMortQuiTue = false;
             this.CarteJauneDeLaMortQuiTue = false;
             this.CarteRougeDeLaMortQuiTue = false; 
+            this.RedCardUi -= 1;
+            this.BlueCardUi -= 1;
+            this.YellowCardUi -= 1;
             console.log("Miaow!! Feline good !!")
             console.log("ARE YOU KITTEN ME!! I need new cards ?!!");
         }
@@ -918,6 +1004,10 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             this.CarteJauneDeLaMortQuiTue = false;
             this.CarteRougeDeLaMortQuiTue = false; 
             this.CarteVerteDeLaMortQuiTue = false;
+            this.RedCardUi -= 1;
+            this.BlueCardUi -= 1;
+            this.YellowCardUi -= 1;
+            this.GreenCardUi -= 1;
             console.log("Miaow!! Feline good !!")
             console.log("ARE YOU KITTEN ME!! I need new cards ?!!");
         }
@@ -959,6 +1049,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         }
         if (this.player.x >= 880 && this.player.y <= 832 && this.player.x <= 1008 && this.player.y >= 736 && this.CarteRougeDeLaMortQuiTue == true && this.CarteBleuDeLaMortQuiTue == true && this.CarteJauneDeLaMortQuiTue == true && this.CarteVerteDeLaMortQuiTue == true) {
             this.PorteRougeBleuJauneVerteTrois.disableBody(true, true)
+            this.VictoryText = this.add.text(300,300,"Victory!",{fontSize: '20px', fill: '#fff'})
             console.log("I made It");
         }
         
@@ -1014,10 +1105,11 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         if (this.gameOver == true){return;}
         
-       if(this.player.overlap.BadGuyLeft){
-           this.BadGuyLeft.anims.play('SpriteBadGuyLeftKick', true);
-            this.player.setVelocityX(-450);
-        }
+        //if(this.player.overlap.BadGuyLeft){
+        //   this.BadGuyLeft.anims.play('SpriteBadGuyLeftKick', true);
+        //    this.player.setVelocityX(-450);
+        //}
+
         if (this.clavier.Q.isDown && !this.onWallGauche && ! this.walljump){ //si la touche gauche est appuyée
             this.player.setVelocityX(-160); //alors vitesse négative en X
             this.player.anims.play('left', true); //et animation => gauche
