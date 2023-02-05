@@ -396,9 +396,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         
             this.BadGuyLeft = this.physics.add.group({ allowGravity : true, collideWorldBounds: true});
             this.BadGuyLeftUn = this.BadGuyLeft.create(1590,100, 'SpriteBadGuyLeft').setSize(50,45).setOffset(-15,19);
-            //this.BadGuyLeftUn.setCircle(20);
-
-            //this.BadGuyLeftUn.setCircle(20);
+    
 
 
 
@@ -542,7 +540,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.SpriteBoxVide = this.physics.add.sprite(1520, 384, 'SpriteBoxVide').setSize(25, 64);
         this.SpriteBoxVide.body.allowGravity = false;
 
-        this.SpriteHitboxAttaqueEnnemi = this.physics.add.sprite(1520, 384, 'SpriteBoxVide').setSize(25, 50);
+        this.SpriteHitboxAttaqueEnnemi = this.physics.add.sprite(1520, 384, 'SpriteBoxVide').setSize(25, 55).setOffset(0.5);
         this.SpriteHitboxAttaqueEnnemi.body.allowGravity = false;
         
 
@@ -551,6 +549,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         
         this.player = this.physics.add.sprite(0,400, 'perso').setSize(20,20).setOffset(5,12); //SPAWN LEVEL 1 0.400  : LEVEL 2 1552, 384 LEVEL 3 
         //this.player.setCircle(10)
+
         this.player.invulnerable = false;
 
 
@@ -656,6 +655,11 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.physics.add.overlap(this.player, this.HealthPotion, this.MiamMiamLesBonnesCroquettes, null, this);
         
         this.physics.add.overlap(this.player,this.SpriteBoxVide, this.JeTrouveMonPremierPouvoir,null,this);
+
+        this.physics.add.overlap(this.player, this.SpriteBoxVide, function(){
+
+            var MonNouveauPouvoir = this.add.text()
+        })
 
 
 
@@ -897,6 +901,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.EnnemiEnAttaque = true
         
         this.sleep(800).then(() => {
+            this.BadGuyLeftUn.anims.play('SpriteBadGuyLeftKicking', true);
             this.SpriteHitboxAttaqueEnnemi.x = this.BadGuyLeftUn.x - 32;
             this.SpriteHitboxAttaqueEnnemi.y = this.BadGuyLeftUn.y;
             this.sleep(400).then(() => {
@@ -906,17 +911,32 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         }
 
         LeChatEstEjecte(player, SpriteHitboxAttaqueEnnemi){
-            this.BadGuyLeftUn.anims.play('SpriteBadGuyLeftKicking', true);
-            this.mespointsdevie -= 1; 
-            this.player.invulnerable = true;
-            this.player.body.allowGravity = false;
-            this.player.setVelocityX(-300);
-            this.player.setVelocityY(-200);
-            this.sleep(100).then(() => {
-                this.player.body.allowGravity = true;
 
-            })
+            if(!this.player.invulnerable){
+            
+            this.mespointsdevie -= 1; 
+                if(this.mespointsdevie === 0){
+                 return;
+                }
+                
+                this.player.setVelocityX(-300);
+                this.player.setVelocityY(-200);
+                this.player.body.allowGravity = false;
+                this.player.invulnerable = true;
+
+                this.sleep(100).then(() => {
+
+                    setTimeout(()=>{
+                    this.player.invulnerable= false
+                    this.player.body.allowGravity = true;
+                    },1000);
+                
+
+                    }   
+                )
         }
+        }
+    
         //***********************************************        PRENDRE LES COLLECTIBLES      *******************************************************************
 
     JePossedeUneTresBelleCarteRouge(player, RedCard){
@@ -970,6 +990,8 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
     
 
     update(){
+
+
 
         this.BadGuyLeftUn.anims.play('SpriteBadGuyLeft', true);
         if(this.BadGuyLeftUn.x <= 1530){
