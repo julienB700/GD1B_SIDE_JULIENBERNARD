@@ -404,6 +404,8 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         
             this.BadGuyRight = this.physics.add.group({ allowGravity : false, collideWorldBounds: true});
             this.BadGuyRightUn = this.BadGuyRight.create(48,703, 'SpriteBadGuyRight').setSize(50,45).setOffset(-3,19);
+            this.BadGuyRightUn = this.BadGuyRight.create(240,1440, 'SpriteBadGuyRight').setSize(50,45).setOffset(-3,19);
+       
        
 
 
@@ -542,12 +544,16 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
 
         this.SpriteHitboxAttaqueEnnemi = this.physics.add.sprite(1520, 384, 'SpriteBoxVide').setSize(25, 55).setOffset(0.5);
         this.SpriteHitboxAttaqueEnnemi.body.allowGravity = false;
+
+
+        this.SpriteHitboxAttaqueEnnemi1 = this.physics.add.sprite(1520, 384, 'SpriteBoxVide').setSize(25, 55).setOffset(0.5);
+        this.SpriteHitboxAttaqueEnnemi1.body.allowGravity = false;
         
 
         //***********************************************************************          SPAWN         *********************************************************************************
         Plateformes.setCollisionByProperty({ estSolide: true });
         
-        this.player = this.physics.add.sprite(0,400, 'perso').setSize(20,20).setOffset(5,12); //SPAWN LEVEL 1 0.400  : LEVEL 2 1552, 384 LEVEL 3 
+        this.player = this.physics.add.sprite(200,1400, 'perso').setSize(20,20).setOffset(5,12); //SPAWN LEVEL 1 0.400  : LEVEL 2 1552, 384 LEVEL 3 
         //this.player.setCircle(10)
 
         this.player.invulnerable = false;
@@ -635,14 +641,19 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.physics.add.overlap(this.player, this.BlueCard, this.JePossedeUneTresBelleCarteBleu, null, this);
         this.physics.add.overlap(this.player, this.GreenCard, this.JePossedeUneTresBelleCarteVerte, null, this);
 
+
+
         this.physics.add.overlap(this.player, this.BadGuyLeftUn, this.EnnemiAttaque, null, this);
+        this.physics.add.overlap(this.player, this.BadGuyRightUn, this.EnnemiAttaque1, null, this);
+
         this.physics.add.overlap(this.player, this.SpriteHitboxAttaqueEnnemi, this.LeChatEstEjecte, null, this);
+        this.physics.add.overlap(this.player, this.SpriteHitboxAttaqueEnnemi1, this.LeChatEstEjecte, null, this);
 
 
         this.physics.add.overlap(this.player, this.coin, this.JeRecolteMesPiecesDeMonnaie, null, this);
             
 
-                this.physics.add.overlap(this.coin, this.player,function(){
+                if(this.physics.add.overlap(this.coin, this.player,function(){
                 //ne fonctionne pas pour le moment
                     var coinUp = this.add.text(420,233, "+1$",{fontSize: '30px', fill: '#fff'}).setScale(1).setScrollFactor(0);
 
@@ -650,7 +661,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
                            coinUp.destroy();
                        },[],this);
                    
-                },null,this);
+                },null,this));
     
         this.physics.add.overlap(this.player, this.HealthPotion, this.MiamMiamLesBonnesCroquettes, null, this);
         
@@ -732,7 +743,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.anims.create({
             key: 'SpriteBadGuyLeftKicking',
             frames: this.anims.generateFrameNumbers('SpriteTheBadGuy', {start:14,end:16}),
-            frameRate: 1,
+            frameRate: 10,
             repeat: 0,
         })
 
@@ -902,7 +913,7 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.EnnemiEnAttaque = true
         
         this.sleep(800).then(() => {
-            this.BadGuyLeftUn.anims.play('SpriteBadGuyLeftKicking', true);
+            
             this.SpriteHitboxAttaqueEnnemi.x = this.BadGuyLeftUn.x - 32;
             this.SpriteHitboxAttaqueEnnemi.y = this.BadGuyLeftUn.y;
             this.sleep(400).then(() => {
@@ -912,18 +923,58 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         }
 
         LeChatEstEjecte(player, SpriteHitboxAttaqueEnnemi){
-
+            this.BadGuyLeftUn.anims.play('SpriteBadGuyLeftKicking', true);
             if(!this.player.invulnerable){
             
             this.mespointsdevie -= 1; 
                 if(this.mespointsdevie === 0){
                     this.player.setTint( 0xff0000 );
                     this.physics.pause();
-
                 }
+
+                this.player.setVelocityX(-1000);
+                this.player.setVelocityY(-1000);
+                this.player.body.allowGravity = false;
+                this.player.invulnerable = true;
+
+                this.sleep(100).then(() => {
+
+                    setTimeout(()=>{
+                    this.player.invulnerable= false
+                    this.player.body.allowGravity = true;
+                    },1000);
                 
-                this.player.setVelocityX(-300);
-                this.player.setVelocityY(-200);
+
+                    }   
+                )
+        }
+        }
+        EnnemiAttaque1(player, BadGuyRightUn){ 
+        
+        this.EnnemiEnAttaque1 = true
+        
+        this.sleep(800).then(() => {
+            
+            this.SpriteHitboxAttaqueEnnemi1.x = this.BadGuyRighttUn.x + 32;
+            this.SpriteHitboxAttaqueEnnemi1.y = this.BadGuyRightUn.y;
+            this.sleep(400).then(() => {
+                this.SpriteHitboxAttaqueEnnemi1.x = 0;
+                this.SpriteHitboxAttaqueEnnemi1.y = 0;
+        })})
+        }
+
+        LeChatEstEjecte(player, SpriteHitboxAttaqueEnnemi1){
+            this.BadGuyRightUn.anims.play('SpriteBadGuyRightKicking', true);
+            if(!this.player.invulnerable){
+            
+            this.mespointsdevie -= 1; 
+                if(this.mespointsdevie === 0){
+                    this.player.setTint( 0xff0000 );
+                    this.physics.pause();
+                }
+
+                this.player.setVelocityX(1000);
+                this.player.setVelocityY(1000);
                 this.player.body.allowGravity = false;
                 this.player.invulnerable = true;
 
@@ -1005,7 +1056,18 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             this.BadGuyLeftUn.setVelocityX(-40); 
             this.BadGuyLeftUn.anims.play('SpriteBadGuyLeft', true); 
         }
-        
+
+
+
+        this.BadGuyRightUn.anims.play('SpriteBadGuyRight', true);
+        if(this.BadGuyRightUn.x <= 240){
+            this.BadGuyRightUn.setVelocityX(40); 
+            //this.BadGuyRightUn.anims.play('SpriteBadGuyLeft', true); 
+        }
+        else if(this.BadGuyRightUn.x >= 350){
+            this.BadGuyRightUn.setVelocityX(-40); 
+            //this.BadGuyLeftUn.anims.play('SpriteBadGuyRight', true); 
+        }
 
         if (this.timer == true){
             if (this.chrono < 360){
