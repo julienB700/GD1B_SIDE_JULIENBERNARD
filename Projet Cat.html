@@ -546,14 +546,14 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         this.SpriteHitboxAttaqueEnnemi.body.allowGravity = false;
 
 
-        this.SpriteHitboxAttaqueEnnemi1 = this.physics.add.sprite(1520, 384, 'SpriteBoxVide').setSize(25, 55).setOffset(0.5);
-        this.SpriteHitboxAttaqueEnnemi1.body.allowGravity = false;
+        //this.SpriteHitboxAttaqueEnnemi1 = this.physics.add.sprite(1520, 384, 'SpriteBoxVide').setSize(25, 55).setOffset(0.5);
+        //this.SpriteHitboxAttaqueEnnemi1.body.allowGravity = false;
         
 
         //***********************************************************************          SPAWN         *********************************************************************************
         Plateformes.setCollisionByProperty({ estSolide: true });
         
-        this.player = this.physics.add.sprite(200,1400, 'perso').setSize(20,20).setOffset(5,12); //SPAWN LEVEL 1 0.400  : LEVEL 2 1552, 384 LEVEL 3 
+        this.player = this.physics.add.sprite(0,400, 'perso').setSize(20,20).setOffset(5,12); //SPAWN LEVEL 1 0.400  : LEVEL 2 1552, 384 LEVEL 3 
         //this.player.setCircle(10)
 
         this.player.invulnerable = false;
@@ -667,10 +667,15 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         
         this.physics.add.overlap(this.player,this.SpriteBoxVide, this.JeTrouveMonPremierPouvoir,null,this);
 
-        this.physics.add.overlap(this.player, this.SpriteBoxVide, function(){
+        if (this.physics.add.overlap(this.player, this.SpriteBoxVide, function(){
 
-            var MonNouveauPouvoir = this.add.text()
-        })
+            var MonNouveauPouvoir = this.add.text(300,400,"Dash débloqué (Press Shift)",{fontSize:'20px', fill: '#fff'}).setScale(1).setScrollFactor(0);
+
+                this.time.delayedCall(2000,function(){
+                    MonNouveauPouvoir.destroy();
+
+                },[],this);
+        },null,this));
 
 
 
