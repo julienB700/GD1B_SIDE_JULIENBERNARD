@@ -887,10 +887,11 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
         //***********************************************        PERDRE DE LA VIE       *******************************************************************
 
     JePerdsDeLaVieOhMonDieu(player, fire){
-        player.setTint( 0xff0000 );
+    
             if (player.scene.Nombredevieperdu == 0){
                 console.log("Smell like burnt Cat in here !!")
                 player.scene.Nombredevieperdu += 1;
+                this.player.setTint( 0xff0000 );
                 this.physics.pause();
             }   
 
@@ -916,7 +917,9 @@ src="//cdn.jsdelivr.net/npm/phaser@3.55.2/dist/phaser.js"></script>
             
             this.mespointsdevie -= 1; 
                 if(this.mespointsdevie === 0){
-                 return;
+                    this.player.setTint( 0xff0000 );
+                    this.physics.pause();
+
                 }
                 
                 this.player.setVelocityX(-300);
