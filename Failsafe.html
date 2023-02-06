@@ -1,8 +1,14 @@
-if(this.BadGuyLeftUn.x <= 1530){
-    this.BadGuyLeftUn.setVelocityX(40); 
-    this.BadGuyLeftUn.anims.play('SpriteBadGuyRight', true); 
-}
-else if(this.BadGuyLeftUn.x >= 1580){
-    this.BadGuyLeftUn.setVelocityX(-40); 
-    this.BadGuyLeftUn.anims.play('SpriteBadGuyLeft', true); 
-}
+LeChatEstEjecte(player, SpriteHitboxAttaqueEnnemi){
+    if (!this.player.invulnerable) {
+      this.BadGuyLeftUn.anims.play('SpriteBadGuyLeftKicking', true);
+      this.mespointsdevie -= 1; 
+      this.player.invulnerable = true;
+      this.player.body.allowGravity = false;
+      this.player.setVelocityX(-300);
+      this.player.setVelocityY(-200);
+      setTimeout(() => {
+        this.player.invulnerable = false;
+        this.player.body.allowGravity = true;
+      }, 1000); // invincibility lasts for 1000 milliseconds
+    }
+  }
